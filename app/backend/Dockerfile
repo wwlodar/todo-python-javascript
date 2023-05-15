@@ -1,4 +1,4 @@
-FROM python:3.8.10-slim
+FROM python:3.10-slim
 
 ENV PYTHONUNBUFFERED 1
 
@@ -13,6 +13,6 @@ RUN apt install -y make \
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY . /code
+COPY . ./
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["uvicorn", "app.backend.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

@@ -5,14 +5,18 @@ services:
     image: postgres:11
     ports:
       - "5432:5432"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_SERVER=db
-      - POSTGRES_DB=test_db
-  web:
-    build: .
-    command: bash -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+    env_file: .env
+    # environment:
+    #   - POSTGRES_USER=postgres
+    #   - POSTGRES_PASSWORD=postgres
+    #   - POSTGRES_SERVER=db
+    #   - POSTGRES_DB=test_db
+  backend:
+    env_file: .env
+    build:
+      context: .
+      dockerfile: app/backend/Dockerfile
+    command: bash -c "alembic upgrade head && uvicorn app.backend.main:app --host 0.0.0.0 --port 8000 --reload"
     volumes:
       - .:/code
     ports:
