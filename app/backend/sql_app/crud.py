@@ -30,3 +30,11 @@ def get_note(db: Session, note_id: int):
 
 def get_event(db: Session, event_id: int):
     return db.query(Event).filter(Event.event_id == event_id).first()
+
+
+def get_user_events(db: Session, user_id: int):
+    return db.query(Event).filter(Event.user_id == user_id).all()
+
+
+def get_user_notes(db: Session, user_id: int):
+    return db.query(Note).filter(Note.user_id == user_id).all()

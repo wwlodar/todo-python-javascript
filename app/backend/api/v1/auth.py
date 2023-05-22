@@ -1,6 +1,6 @@
 import os
 from datetime import datetime, timedelta
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -14,15 +14,15 @@ from app.backend.sql_app.schemas import TokenData, UserInDB
 # to get a string like this run:
 # openssl rand -hex 32
 SECRET_KEY = os.getenv("SECRET_KEY")
+REFRESH_SECRET_KEY = os.getenv("REFRESH_SECRET_KEY")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+REFRESH_TOKEN_EXPIRE_MINUTES = 60
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
-# verfiy_password, authenticate_user, create_token, get_token, delete_token, get_current_user
 
 
 def verify_password(plain_password, hashed_password):
@@ -48,6 +48,7 @@ def authenticate_user(db: Session, username: str, password: str):
     return user
 
 
+# add refresh tokens
 def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
     to_encode = data.copy()
     if expires_delta:
@@ -59,8 +60,30 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
     return encoded_jwt
 
 
-def delete_access_token():
-    pass
+def create_refresh_token(
+    subject: Union[str, Any], expires_delta: Union[timedelta, None] = None
+) -> str:
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=REFRESH_TOKEN_EXPIRE_MINUTES)
+
+    to_encode = {"exp": expires_delta, "sub": str(subject)}
+    encoded_jwt = jwt.encode(to_encode, REFRESH_SECRET_KEY, ALGORITHM)
+    return encoded_jwt
+
+
+denylist: set = set()
+
+
+def delete_access_token(
+    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
+):
+    if token in denylist:
+        denylist.add(token)
+        return {"deleted": True}
+    else:
+        return {"deleted": False}
 
 
 async def get_current_user(
@@ -71,6 +94,8 @@ async def get_current_user(
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
+    if token in denylist:
+        return credentials_exception
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")

@@ -1,16 +1,19 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.backend.sql_app.crud import create_event, get_event
+from app.backend.api.v1.auth import get_current_user
+from app.backend.sql_app.crud import create_event, get_event, get_user_events
 from app.backend.sql_app.main import get_db
-from app.backend.sql_app.schemas import EventCreate
+from app.backend.sql_app.schemas import EventCreate, User
 
 router = APIRouter()
 
 
 @router.get("/events")
-async def get_all_events():
-    return {"message": "Hello World"}
+async def get_user_events_from_db(
+    db: Session = Depends(get_db), current_user: User = Depends(get_current_user)
+):
+    return get_user_events(db=db, user_id=current_user.user_id)
 
 
 @router.get("/event/{event_id}")
@@ -24,7 +27,9 @@ async def get_one_event(event_id: int, db: Session = Depends(get_db)):
 
 @router.post("/events")
 async def add_new_event(
-    user_id: int, event: EventCreate, db: Session = Depends(get_db)
+    event: EventCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
 ):
-    event = create_event(db=db, event=event, user_id=user_id)
+    event = create_event(db=db, event=event, user_id=current_user.user_id)
     return event
