@@ -51,6 +51,7 @@ def logout(
     return delete_access_token(token)
 
 
+@router.post("/register")
 async def create_user(data: UserCreate = Depends(), db: Session = Depends(get_db)):
     # querying database to check if user already exist
     user = db.get(data.email, None)
@@ -62,6 +63,7 @@ async def create_user(data: UserCreate = Depends(), db: Session = Depends(get_db
     user = {
         "email": data.email,
         "password": get_password_hash(data.password),
+        "username": data.username,
         "id": str(uuid.uuid4()),
     }
     db[data.email] = user  # saving user to database
