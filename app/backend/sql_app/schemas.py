@@ -38,11 +38,11 @@ class Event(EventBase):
 
 class UserBase(BaseModel):
     email: EmailStr
-    username: str
 
 
 class UserCreate(BaseModel):
     password: str
+    username: str
 
 
 class UserInDB(UserBase):
@@ -51,6 +51,7 @@ class UserInDB(UserBase):
 
 class User(UserBase):
     user_id: int
+    username: str
     events: List[Event] = []
     notes: List[Note] = []
 
