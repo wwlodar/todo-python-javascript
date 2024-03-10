@@ -20,6 +20,33 @@ from app.backend.sql_app.schemas import Token, TokenData, User, UserCreate
 router = APIRouter()
 
 
+@router.post("/register")
+async def create_user(data: UserCreate = Depends(), db: Session = Depends(get_db)):
+    print(data)
+    # querying database to check if user already exist
+    user = db.get(data.email, None)
+    if user is not None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User with this email already exist",
+        )
+    user = {
+        "email": data.email,
+        "password": get_password_hash(data.password),
+        "username": data.username,
+        "id": str(uuid.uuid4()),
+    }
+    db[data.email] = user  # saving user to database
+    return user
+
+
+router.get("/user")
+
+
+def get_user_info(current_user: User = Depends(get_current_user)):
+    return current_user.email
+
+
 @router.post("/token", response_model=Token)
 async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -44,34 +71,9 @@ async def login(
     }
 
 
+@router.post("/logout")
 def logout(
     current_user: User = Depends(get_current_user), db: Session = Depends(get_db)
 ):
     token = TokenData(username=current_user.username, db=db)
     return delete_access_token(token)
-
-
-@router.post("/register")
-async def create_user(data: UserCreate = Depends(), db: Session = Depends(get_db)):
-    # querying database to check if user already exist
-    user = db.get(data.email, None)
-    if user is not None:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="User with this email already exist",
-        )
-    user = {
-        "email": data.email,
-        "password": get_password_hash(data.password),
-        "username": data.username,
-        "id": str(uuid.uuid4()),
-    }
-    db[data.email] = user  # saving user to database
-    return user
-
-
-router.get("/user")
-
-
-def get_user_info(current_user: User = Depends(get_current_user)):
-    return current_user.email
