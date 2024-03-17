@@ -1,0 +1,63 @@
+version: 2.1
+
+parameters:
+  stage-name:
+    type: string
+    default: "tests-<< pipeline.number >>"
+
+orbs:
+  python: circleci/python@2.1.1
+
+jobs:
+  black:
+    executor:
+      name: python/default
+      tag: "3.9"
+    steps:
+      - checkout
+      - python/install-packages:
+          args: -d black
+          pkg-manager: pipenv
+      - run: pipenv run black --version
+      - run:
+          command: |
+            pipenv run black --check app
+          name: Black it
+
+  linter:
+    executor:
+      name: python/default
+      tag: "3.9"
+    steps:
+      - checkout
+      - python/install-packages:
+          args: -d flake8 flake8-print
+          pkg-manager: pipenv
+      - run: pipenv run flake8 --version
+      - run:
+          command: |
+            pipenv run flake8 -v app
+          name: Lint it
+  unit-tests:
+    environment:
+      TESTING_ENV: "true"
+    executor:
+      name: python/default
+      tag: "3.9"
+    steps:
+      - checkout
+      - python/install-packages:
+          args: --dev
+      - run: pipenv run python -m pytest
+      - store_test_results:
+          path: test-results
+
+workflows:
+  main:
+    jobs:
+      - black
+      - linter
+      - unit-tests:
+          requires:
+            - black
+            - linter
