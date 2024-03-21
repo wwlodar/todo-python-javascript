@@ -10,6 +10,8 @@ services:
       - app-network
   backend:
     env_file: .env
+    environment:
+       - PYTHONUNBUFFERED=1
     build:
       context: .
       dockerfile: app/backend/Dockerfile

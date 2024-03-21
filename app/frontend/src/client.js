@@ -42,6 +42,9 @@ class FastAPIClient {
 	getApiClient(config) {
 		let initialConfig = {
 			baseURL: `${config.apiBasePath}/api/v1`,
+			headers: {
+				"Content-type": "application/json"
+			  },
 
 		}
 
@@ -58,10 +61,9 @@ class FastAPIClient {
 
 	register(email, password, username) {
 		const loginData = {
-			email,
-			password,
+			email:email,
+			password:password,
 			username: username,
-			is_active: true,
 		}
 
 		return this.apiClient.post("/register", loginData).then(

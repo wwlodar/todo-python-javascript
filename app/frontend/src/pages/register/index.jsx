@@ -6,9 +6,9 @@ import InputForm from '../../components/InputForm'
 
 const SignUp = () => {
   const [error, setError] = useState({ email: '', password: '', username: '', confirmPassword: '' });
-  const [registerForm, setRegisterForm] = useState({ email: '', password: '', username: '', confirmPassword: '' });  // 1
+  const [registerForm, setRegisterForm] = useState({ email: '', password: '', username: '', confirmPassword: '' });
   const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()  // 2
+  const navigate = useNavigate()
 
 
   const onInputChange = e => {
@@ -101,7 +101,7 @@ const SignUp = () => {
             value={registerForm.password}
             onChange={onInputChange}
           />
-                    <InputForm
+          <InputForm
             type={"confirmPassword"}
             name={"confirmPassword"}
             label={"confirm Password"}
