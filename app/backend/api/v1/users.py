@@ -22,7 +22,6 @@ router = APIRouter()
 
 @router.post("/register")
 async def create_user(data: UserCreate = Depends(), db: Session = Depends(get_db)):
-    print(data)
     # querying database to check if user already exist
     user = db.get(data.email, None)
     if user is not None:
