@@ -11,7 +11,8 @@ router = APIRouter()
 
 @router.get("/notes")
 async def get_user_notes_get_user_notes_from_db(
-    db: Session = Depends(get_db), current_user: User = Depends(get_current_user)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     return get_user_notes(db=db, user_id=current_user.user_id)
 
