@@ -49,7 +49,9 @@ def authenticate_user(db: Session, username: str, password: str):
 
 
 # add refresh tokens
-def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
+def create_access_token(
+    data: dict, expires_delta: Union[timedelta, None] = None
+):
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
@@ -66,9 +68,11 @@ def create_refresh_token(
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=REFRESH_TOKEN_EXPIRE_MINUTES)
+        expire = datetime.utcnow() + timedelta(
+            minutes=REFRESH_TOKEN_EXPIRE_MINUTES
+        )
 
-    to_encode = {"exp": expires_delta, "sub": str(subject)}
+    to_encode = {"exp": expire, "sub": str(subject)}
     encoded_jwt = jwt.encode(to_encode, REFRESH_SECRET_KEY, ALGORITHM)
     return encoded_jwt
 

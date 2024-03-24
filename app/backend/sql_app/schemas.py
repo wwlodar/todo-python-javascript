@@ -8,8 +8,7 @@ class NoteBase(BaseModel):
     title: str
     id: int
     done: bool
-
-    user_id: int
+    user_id: str
 
 
 class NoteCreate(NoteBase):
@@ -24,8 +23,7 @@ class EventBase(BaseModel):
     title: str
     id: int
     happened: bool
-
-    user_id: int
+    user_id: str
 
 
 class EventCreate(EventBase):
@@ -50,7 +48,7 @@ class UserInDB(UserBase):
 
 
 class User(UserBase):
-    user_id: int
+    user_id: str
     username: str
     events: List[Event] = []
     notes: List[Note] = []

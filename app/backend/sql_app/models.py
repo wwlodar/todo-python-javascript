@@ -7,7 +7,7 @@ from app.backend.sql_app.db import Base
 class User(Base):
     __tablename__ = "users"
 
-    user_id = Column(Integer, unique=True, primary_key=True)
+    user_id = Column(String, unique=True, primary_key=True)
     username = Column(String)
     email = Column(String)
     hashed_password = Column(String)
@@ -24,7 +24,7 @@ class Note(Base):
     done = Column(Boolean, default=False)
     date_added = Column(DateTime)
 
-    user_id = Column(Integer, ForeignKey("users.user_id"))
+    user_id = Column(String, ForeignKey("users.user_id"))
     user = relationship("User", back_populates="notes")
 
 
@@ -36,5 +36,5 @@ class Event(Base):
     happened = Column(Boolean, default=False)
     date_added = Column(DateTime)
 
-    user_id = Column(Integer, ForeignKey("users.user_id"))
+    user_id = Column(String, ForeignKey("users.user_id"))
     user = relationship("User", back_populates="events")

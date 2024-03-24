@@ -21,7 +21,9 @@ router = APIRouter()
 
 
 @router.post("/register")
-async def create_user(data: UserCreate = Depends(), db: Session = Depends(get_db)):
+async def create_user(
+    data: UserCreate = Depends(), db: Session = Depends(get_db)
+):
     # querying database to check if user already exist
     user = db.get(data.email, None)
     if user is not None:
@@ -33,7 +35,7 @@ async def create_user(data: UserCreate = Depends(), db: Session = Depends(get_db
         "email": data.email,
         "password": get_password_hash(data.password),
         "username": data.username,
-        "id": str(uuid.uuid4()),
+        "user_id": str(uuid.uuid4()),
     }
     db[data.email] = user  # saving user to database
     return user
@@ -72,7 +74,8 @@ async def login(
 
 @router.post("/logout")
 def logout(
-    current_user: User = Depends(get_current_user), db: Session = Depends(get_db)
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
 ):
     token = TokenData(username=current_user.username, db=db)
     return delete_access_token(token)
