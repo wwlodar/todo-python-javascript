@@ -21,7 +21,7 @@ jobs:
       - run: pipenv run black --version
       - run:
           command: |
-            pipenv run black --check app
+            pipenv run black --check app --line-length=79
           name: Black it
 
   linter:
