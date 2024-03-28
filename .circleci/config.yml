@@ -47,7 +47,8 @@ jobs:
     steps:
       - checkout
       - python/install-packages:
-          args: --dev
+          pip-dependency-file: requirements.txt
+          pkg-manager: pipenv
       - run: pipenv run python -m pytest
       - store_test_results:
           path: test-results
