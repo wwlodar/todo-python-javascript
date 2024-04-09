@@ -63,7 +63,7 @@ jobs:
           name: Running tests
           command: |
             . venv/bin/activate
-            pytest tests/test.py
+            pytest app/backend/tests/
 
 
 workflows:
