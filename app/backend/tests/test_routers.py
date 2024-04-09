@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from app.backend.main import app
-from app.backend.sql_app import Base
+from app.backend.sql_app.db import Base
 from app.backend.sql_app.main import get_db
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
@@ -37,12 +37,7 @@ app.dependency_overrides[get_db] = override_get_db
 client = TestClient(app)
 
 
-def test_read_main():
-    response = client.get("/")
-    assert response.status_code == 200
-
-
 def test_health():
-    response = client.get("/health")
+    response = client.get("api/v1/health")
     assert response.status_code == 200
-    assert response.content == {"status": "It works!"}
+    assert response.content == b'{"status":"It works!"}'

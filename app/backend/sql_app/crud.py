@@ -8,7 +8,7 @@ def get_user(db: Session, user_id: int):
     return db.query(User).filter(User.id == user_id).first()
 
 
-def create_note(db: Session, note: NoteCreate, user_id: int):
+def create_note(db: Session, note: NoteCreate, user_id: str):
     note = Note(**note.dict(), user_id=user_id)
     db.add(note)
     db.commit()
@@ -16,7 +16,7 @@ def create_note(db: Session, note: NoteCreate, user_id: int):
     return note
 
 
-def create_event(db: Session, event: EventCreate, user_id: int):
+def create_event(db: Session, event: EventCreate, user_id: str):
     event = Event(**event.dict(), user_id=user_id)
     db.add(event)
     db.commit()
@@ -32,9 +32,9 @@ def get_event(db: Session, event_id: int):
     return db.query(Event).filter(Event.event_id == event_id).first()
 
 
-def get_user_events(db: Session, user_id: int):
+def get_user_events(db: Session, user_id: str):
     return db.query(Event).filter(Event.user_id == user_id).all()
 
 
-def get_user_notes(db: Session, user_id: int):
+def get_user_notes(db: Session, user_id: str):
     return db.query(Note).filter(Note.user_id == user_id).all()
