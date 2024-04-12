@@ -43,7 +43,8 @@ class FastAPIClient {
 		let initialConfig = {
 			baseURL: `${config.apiBasePath}/api/v1`,
 			headers: {
-				"Content-type": "application/json"
+				"Content-type": "application/json",
+				"Access-Control-Allow-Origin": "*",
 			  },
 
 		}
