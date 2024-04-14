@@ -41,3 +41,16 @@ def test_health():
     response = client.get("api/v1/health")
     assert response.status_code == 200
     assert response.content == b'{"status":"It works!"}'
+
+
+def test_register():
+    response = client.post(
+        "api/v1/register",
+        json={
+            "username": "foobar",
+            "email": "foobar@test.com",
+            "password": "Password1234!",
+        },
+    )
+    assert response.status_code == 200
+    assert response.content == b'{"status":"It works!"}'
