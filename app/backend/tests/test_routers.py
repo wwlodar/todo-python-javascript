@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from app.backend.main import app
-from app.backend.sql_app.db import Base
+from app.backend.sql_app import Base
 from app.backend.sql_app.main import get_db
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
@@ -47,10 +47,11 @@ def test_register():
     response = client.post(
         "api/v1/register",
         json={
+            "password": "Password1234!",
             "username": "foobar",
             "email": "foobar@test.com",
-            "password": "Password1234!",
         },
     )
-    assert response.status_code == 200
+
     assert response.content == b'{"status":"It works!"}'
+    assert response.status_code == 200

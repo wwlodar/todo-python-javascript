@@ -4,8 +4,8 @@ from app.backend.sql_app.models import Event, Note, User
 from app.backend.sql_app.schemas import EventCreate, NoteCreate
 
 
-def get_user(db: Session, user_id: int):
-    return db.query(User).filter(User.id == user_id).first()
+def get_user_by_email(db: Session, email: str):
+    return db.query(User).filter(User.email == email).first()
 
 
 def create_note(db: Session, note: NoteCreate, user_id: str):

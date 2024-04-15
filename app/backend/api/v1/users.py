@@ -14,36 +14,36 @@ from app.backend.api.v1.auth import (
     get_current_user,
     get_password_hash,
 )
+from app.backend.sql_app.crud import get_user_by_email
 from app.backend.sql_app.main import get_db
 from app.backend.sql_app.schemas import Token, TokenData, User, UserCreate
 
 router = APIRouter()
 
 
-@router.post("/register")
-async def create_user(
-    data: UserCreate = Depends(), db: Session = Depends(get_db)
-):
+@router.post(
+    "/register",
+)
+def create_user(data: UserCreate, db: Session = Depends(get_db)):
     # querying database to check if user already exist
-    user = db.get(data.email, None)
-    if user is not None:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="User with this email already exist",
-        )
-    user = {
-        "email": data.email,
-        "password": get_password_hash(data.password),
-        "username": data.username,
-        "user_id": str(uuid.uuid4()),
-    }
-    db[data.email] = user  # saving user to database
-    return user
+    if data.email:
+        user = get_user_by_email(email=data.email, db=db)
+        if user is not None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="User with this email already exist",
+            )
+        user = {
+            "email": data.email,
+            "password": get_password_hash(data.password),
+            "username": data.username,
+            "user_id": str(uuid.uuid4()),
+        }
+        db[data.email] = user  # saving user to database
+        return user
 
 
-router.get("/user")
-
-
+@router.get("/user")
 def get_user_info(current_user: User = Depends(get_current_user)):
     return current_user.email
 
