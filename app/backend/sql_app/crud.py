@@ -8,6 +8,13 @@ def get_user_by_email(db: Session, email: str):
     return db.query(User).filter(User.email == email).first()
 
 
+def create_user(db: Session, user: User):
+    created_user = User(**user.dict())
+    db.add(created_user)
+    db.commit()
+    return user
+
+
 def create_note(db: Session, note: NoteCreate, user_id: str):
     note = Note(**note.dict(), user_id=user_id)
     db.add(note)

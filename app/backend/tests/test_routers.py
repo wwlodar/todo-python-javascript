@@ -37,13 +37,13 @@ app.dependency_overrides[get_db] = override_get_db
 client = TestClient(app)
 
 
-def test_health():
+def test_health(test_db):
     response = client.get("api/v1/health")
     assert response.status_code == 200
     assert response.content == b'{"status":"It works!"}'
 
 
-def test_register():
+def test_register(test_db):
     response = client.post(
         "api/v1/register",
         json={
@@ -53,5 +53,5 @@ def test_register():
         },
     )
 
-    assert response.content == b'{"status":"It works!"}'
+    assert response.content == b'{"status":"User foobar was created"}'
     assert response.status_code == 200
