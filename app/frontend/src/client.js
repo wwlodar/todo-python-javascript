@@ -44,7 +44,9 @@ class FastAPIClient {
 			baseURL: `${config.apiBasePath}/api/v1`,
 			headers: {
 				"Content-type": "application/json",
+				"Access-Control-Allow-Headers": "*",
 				"Access-Control-Allow-Origin": "*",
+				"Access-Control-Allow-Methods": "*",
 			  },
 
 		}
