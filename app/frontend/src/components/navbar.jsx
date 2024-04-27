@@ -13,6 +13,7 @@ const NavBar = () => {
                    <li><NavLink to='/register'>Register</NavLink></li>
                    <li>Login</li>
                    <li><NavLink to='/event/1'>Event 1</NavLink></li>
+                   <li><NavLink to='/event/2'>Event 2</NavLink></li>
                </ul>
            </nav>
            </div>
