@@ -63,13 +63,13 @@ class FastAPIClient {
 	}
 
 	register(email, password, username) {
-		const loginData = {
+		const registerData = {
 			email:email,
 			password:password,
 			username: username,
 		}
 
-		return this.apiClient.post("/register", loginData).then(
+		return this.apiClient.post("/register", registerData).then(
 			(resp) => {
 				return resp.data
 		})
@@ -87,7 +87,7 @@ class FastAPIClient {
 		}
 
 		return this.apiClient
-			.post("/token", form_data)
+			.post("/login", form_data)
 			.then((resp) => {
 				localStorage.setItem("token", JSON.stringify(resp.data))
 				return this.fetchUser()
