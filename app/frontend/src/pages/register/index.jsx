@@ -8,14 +8,14 @@ const SignUp = () => {
   const [error, setError] = useState({ email: '', password: '', username: '', confirmPassword: '' });
   const [backendError, setBackendError] = useState('');
   let [isDisabled, setDisabledState] = useState(false);
-  const [registerForm, setRegisterForm] = useState({ email: '', password: '', username: '', confirmPassword: '' });
+  const [InputForm, setInputForm] = useState({ email: '', password: '', username: '', confirmPassword: '' });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate()
 
 
   const onInputChange = e => {
     const { name, value } = e.target;
-    setRegisterForm(prev => ({
+    setInputForm(prev => ({
       ...prev,
       [name]: value
     }));
