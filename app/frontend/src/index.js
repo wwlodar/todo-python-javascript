@@ -6,6 +6,7 @@ import Layout from "./pages/layout/index";
 import Home from "./pages/home/index";
 import Event from "./pages/event/index";
 import Register from "./pages/register/index";
+import Login from "./pages/login/index";
 import NavBar from "./components/navbar"
 
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="event/:id" element={<Event/>}/>
           <Route path="register/" element={<Register/>}/>
+          <Route path="login/" element={<Login/>}/>
       </Routes>
       </Router>
   );

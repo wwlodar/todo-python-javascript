@@ -3,13 +3,14 @@ import {Outlet, Link, useNavigate} from "react-router-dom";
 import {fastapiclient, GetEventById} from '../../client'
 import InputForm from '../../components/InputForm'
 import NavBar from '../../components/navbar'
+import Row from 'react-bootstrap/Row';
 
 
 const Layout =({children}) =>{
   return(
       <>
-      <div class="container text-center">
-  <div class="row">
+      <div className="container text-center">
+  <Row>
 
     <div class="col order-first">
       <a>DUPA</a>
@@ -23,7 +24,7 @@ const Layout =({children}) =>{
       <a>DUPA 3</a>
     </div>
 
-  </div>
+  </Row>
   <main>{children}</main>
 
   </div>

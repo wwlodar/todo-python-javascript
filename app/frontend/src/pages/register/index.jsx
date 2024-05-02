@@ -8,14 +8,14 @@ const SignUp = () => {
   const [error, setError] = useState({ email: '', password: '', username: '', confirmPassword: '' });
   const [backendError, setBackendError] = useState('');
   let [isDisabled, setDisabledState] = useState(false);
-  const [InputForm, setInputForm] = useState({ email: '', password: '', username: '', confirmPassword: '' });
+  const [registerForm, setRegisterForm] = useState({ email: '', password: '', username: '', confirmPassword: '' });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate()
 
 
   const onInputChange = e => {
     const { name, value } = e.target;
-    setInputForm(prev => ({
+    setRegisterForm(prev => ({
       ...prev,
       [name]: value
     }));
@@ -47,7 +47,6 @@ const SignUp = () => {
             stateObj["password"] = "Password is too short";
             setDisabledState(true);
           } else {
-            stateObj["confirmPassword"] = registerForm.confirmPassword ? "" : error.confirmPassword;
             setDisabledState(false);
           }
           break;
@@ -125,7 +124,7 @@ const SignUp = () => {
             onChange={onInputChange}
           />
 
-        <button title={"Create Account"} error={error} loading={loading} disabled={isDisabled}>Create Account</button>
+        <button title={"Create Account"} error={error} loading={loading} disabled={isDisabled} className={`rounded w-full mt-4 p-1`}>Create Account</button>
         <div>
         {(backendError !== '') &&
         <h1>{backendError.message}</h1>}

@@ -1,14 +1,15 @@
 import React from 'react';
+import inputlabel from '../components/css/inputForm.css'
 
 function InputForm({label, name, error, value, onChange, type = "text"}) {
-  return <div>
-            <label className="form-label mt-4 " htmlFor={name}>{label}</label>
+  return  <div class="row">
+            <inputlabel className="col-form-label col-sm-2" htmlFor={name}>{label}</inputlabel>
             <input
                 type={type}
                 name={name}
                 value={value}
                 onChange={onChange}
-                className={`form-contol rounded w-full p-2 border-b-2 ${!error ? "mb-6 border-teal-500 " : "border-red-500 "} text-teal-700 outline-none focus:bg-gray-300`}
+                className={`form-contol rounded col-sm-2 border-b-4 p-2 ${!error ? "border-teal-500 " : "border-red-500 "} text-teal-700 outline-none focus:bg-gray-300`}
             />
             <div>{error && <span className='mb-3 text-red-500' >{error}</span>}</div>
 

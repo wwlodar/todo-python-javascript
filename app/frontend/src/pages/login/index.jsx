@@ -8,14 +8,14 @@ const LoginUser = () => {
   const [error, setError] = useState({ email: '', password: '', username: '', confirmPassword: '' });
   const [backendError, setBackendError] = useState('');
   let [isDisabled, setDisabledState] = useState(false);
-  const [LoginForm, setLoginForm] = useState({ email: '', password: '', username: '', confirmPassword: '' });
+  const [loginForm, setLoginForm] = useState({ email: '', password: '', username: '', confirmPassword: '' });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate()
 
 
   const onInputChange = e => {
     const { name, value } = e.target;
-    setRegisterForm(prev => ({
+    setLoginForm(prev => ({
       ...prev,
       [name]: value
     }));
@@ -73,14 +73,14 @@ const LoginUser = () => {
       });
   }
   return (
-  <form onSubmit={(e) => onRegister(e)}>
+  <form onSubmit={(e) => onLogin(e)}>
          <InputForm
             type={"text"}
             name={"username"}
             label={"Username"}
             required
             error={error.username}
-            value={registerForm.username}
+            value={loginForm.username}
             onChange={onInputChange}
           />
           <InputForm
@@ -89,11 +89,11 @@ const LoginUser = () => {
             label={"Password"}
             required
             error={error.password}
-            value={registerForm.password}
+            value={loginForm.password}
             onChange={onInputChange}
           />
 
-        <button title={"Login"} error={error} loading={loading} disabled={isDisabled}>Login</button>
+        <button title={"Login"} error={error} loading={loading} disabled={isDisabled} className={`rounded w-full mt-4 p-1`}>Login</button>
         <div>
         {(backendError !== '') &&
         <h1>{backendError.message}</h1>}
@@ -105,7 +105,7 @@ const LoginUser = () => {
 const Login = () => {
   return (
     <div className="App">
-        <h1>Login</h1>
+        <h1 className={`mb-4 p-1`}>Login</h1>
 
       <a><LoginUser /></a>
 
