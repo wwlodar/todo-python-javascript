@@ -1,8 +1,7 @@
 import {useState} from "react";
 import {Outlet, useNavigate} from "react-router-dom";
-import {fastapiclient} from '../../client'
 import InputForm from '../../components/InputForm'
-
+import { useAuth } from "../../hooks/authProvider";
 
 const LoginUser = () => {
   const [error, setError] = useState({ email: '', password: '', username: '', confirmPassword: '' });
@@ -11,6 +10,7 @@ const LoginUser = () => {
   const [loginForm, setLoginForm] = useState({ email: '', password: '', username: '', confirmPassword: '' });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate()
+  const auth = useAuth();
 
 
   const onInputChange = e => {
@@ -62,12 +62,11 @@ const LoginUser = () => {
   const onLogin = (e) => {
     e.preventDefault();
     setLoading(true)
-
-    fastapiclient.login(loginForm.password, loginForm.username)
-      .then( () => {
+    auth.loginAction(input)
+    .then( () => {
         navigate('/')
       })
-      .catch( (err) => {
+    .catch( (err) => {
         setLoading(false)
         setBackendError(err);
       });

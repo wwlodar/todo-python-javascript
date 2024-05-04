@@ -8,21 +8,29 @@ import Event from "./pages/event/index";
 import Register from "./pages/register/index";
 import Login from "./pages/login/index";
 import NavBar from "./components/navbar"
+import AuthProvider from './hooks/authProvider';
+import PrivateRoute from "./router/route";
+
 
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
+
 export default function App() {
   return (
     <Router>
       <NavBar/>
+      <AuthProvider>
       <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="event/:id" element={<Event/>}/>
           <Route path="register/" element={<Register/>}/>
           <Route path="login/" element={<Login/>}/>
+          <Route element={<PrivateRoute />}>
+            <Route path="event/:id" element={<Event/>}/>
+          </Route>
       </Routes>
+      </AuthProvider>
       </Router>
   );
 }
@@ -31,6 +39,7 @@ root.render(
   <Layout>
     <App />
   </Layout>
+
 );
 
 

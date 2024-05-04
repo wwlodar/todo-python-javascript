@@ -89,8 +89,7 @@ class FastAPIClient {
 		return this.apiClient
 			.post("/login", form_data)
 			.then((resp) => {
-				localStorage.setItem("token", JSON.stringify(resp.data))
-				return this.fetchUser()
+				return resp
 			})
 	}
 
