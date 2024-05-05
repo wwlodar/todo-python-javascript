@@ -13,17 +13,18 @@ const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const loginAction = async (data) => {
     try {
-      const response = fastapiclient.login(loginForm.password, loginForm.username)
+      const response = fastapiclient.login(data.username, data.password)
       const res = await response.json();
       if (res.data) {
         setUser(res.data.user);
         setToken(res.token);
         localStorage.setItem("token", res.token);
-        return;
+        return data;
       }
       throw new Error(res.message);
     } catch (err) {
       console.error(err);
+      return data
     }
   };
 

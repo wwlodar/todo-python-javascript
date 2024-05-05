@@ -89,7 +89,7 @@ class FastAPIClient {
 		return this.apiClient
 			.post("/login", form_data)
 			.then((resp) => {
-				return resp
+				return resp.data
 			})
 	}
 

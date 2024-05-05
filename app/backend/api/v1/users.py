@@ -48,7 +48,7 @@ def get_user_info(current_user: User = Depends(get_current_user)):
     return current_user.email
 
 
-@router.post("/token", response_model=Token)
+@router.post("/login", response_model=Token)
 async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db),

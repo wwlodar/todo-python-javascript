@@ -62,7 +62,7 @@ const LoginUser = () => {
   const onLogin = (e) => {
     e.preventDefault();
     setLoading(true)
-    auth.loginAction(input)
+    auth.loginAction(loginForm.username, loginForm.password)
     .then( () => {
         navigate('/')
       })
