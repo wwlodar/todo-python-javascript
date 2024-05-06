@@ -1,6 +1,6 @@
 import os
 from datetime import datetime, timedelta
-from typing import Any, Optional, Union
+from typing import Any, Union
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -8,8 +8,9 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
+from app.backend.sql_app.crud import get_user
 from app.backend.sql_app.main import get_db
-from app.backend.sql_app.schemas import TokenData, UserInDB
+from app.backend.sql_app.schemas import TokenData
 
 # to get a string like this run:
 # openssl rand -hex 32
@@ -34,12 +35,6 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-def get_user(db, username: Optional[str]):
-    if username in db:
-        user_dict = db[username]
-        return UserInDB(**user_dict)
-
-
 def authenticate_user(db: Session, username: str, password: str):
     user = get_user(db, username)
     if not user:
@@ -55,9 +50,9 @@ def create_access_token(
 ):
     to_encode = data.copy()
     if expires_delta:
-        expire = datetime.utcnow() + expires_delta
+        expire = datetime.now() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
+        expire = datetime.now() + timedelta(minutes=15)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
@@ -67,9 +62,9 @@ def create_refresh_token(
     subject: Union[str, Any], expires_delta: Union[timedelta, None] = None
 ) -> str:
     if expires_delta:
-        expire = datetime.utcnow() + expires_delta
+        expire = datetime.now() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(
+        expire = datetime.now() + timedelta(
             minutes=REFRESH_TOKEN_EXPIRE_MINUTES
         )
 
@@ -109,7 +104,7 @@ async def get_current_user(
         token_data = TokenData(username=username)
     except JWTError:
         raise credentials_exception
-    user = get_user(db, username=token_data.username)
+    user = get_user(db=db, username=username)
     if user is None:
         raise credentials_exception
     return user
