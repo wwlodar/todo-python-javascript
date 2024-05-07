@@ -58,7 +58,7 @@ def test_register(test_db):
 
 
 def test_register_user_twice(test_db):
-    first_register = client.post(
+    client.post(
         "api/v1/register",
         json={
             "password": "Password1234!",
