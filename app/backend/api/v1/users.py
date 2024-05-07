@@ -1,5 +1,6 @@
 import uuid
 from datetime import timedelta
+from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
@@ -16,7 +17,7 @@ from app.backend.api.v1.auth import (
 )
 from app.backend.sql_app.crud import create_user, get_user_by_email
 from app.backend.sql_app.main import get_db
-from app.backend.sql_app.schemas import Token, TokenData, User, UserCreate
+from app.backend.sql_app.schemas import TokenData, UserCreate, UserInDB
 
 router = APIRouter()
 
@@ -32,7 +33,7 @@ def register_new_user(data: UserCreate, db: Session = Depends(get_db)):
                 detail="User with this email already exist",
             )
         hashed_password = get_password_hash(data.password)
-        db_user = User(
+        db_user = UserInDB(
             username=data.username,
             email=data.email,
             hashed_password=hashed_password,
@@ -44,13 +45,13 @@ def register_new_user(data: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/user")
-def get_user_info(current_user: User = Depends(get_current_user)):
+def get_user_info(current_user: UserInDB = Depends(get_current_user)):
     return current_user.email
 
 
-@router.post("/login", response_model=Token)
+@router.post("/login")
 async def login(
-    form_data: OAuth2PasswordRequestForm = Depends(),
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     db: Session = Depends(get_db),
 ):
     user = authenticate_user(db, form_data.username, form_data.password)
@@ -60,6 +61,7 @@ async def login(
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
@@ -74,7 +76,7 @@ async def login(
 
 @router.post("/logout")
 def logout(
-    current_user: User = Depends(get_current_user),
+    current_user: UserInDB = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     token = TokenData(username=current_user.username, db=db)
