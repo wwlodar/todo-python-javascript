@@ -36,6 +36,8 @@ class Event(EventBase):
 
 class UserBase(BaseModel):
     email: EmailStr
+    username: str
+    user_id: str
 
 
 class UserCreate(BaseModel):
@@ -49,8 +51,6 @@ class UserInDB(UserBase):
 
 
 class User(UserBase):
-    user_id: str
-    username: str
     events: List[Event] = []
     notes: List[Note] = []
 

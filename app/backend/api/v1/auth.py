@@ -24,7 +24,7 @@ REFRESH_TOKEN_EXPIRE_MINUTES = 60
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
 
 def verify_password(plain_password, hashed_password):
@@ -44,7 +44,6 @@ def authenticate_user(db: Session, username: str, password: str):
     return user
 
 
-# add refresh tokens
 def create_access_token(
     data: dict, expires_delta: Union[timedelta, None] = None
 ):
@@ -58,6 +57,7 @@ def create_access_token(
     return encoded_jwt
 
 
+# add refresh token endpoints and logic
 def create_refresh_token(
     subject: Union[str, Any], expires_delta: Union[timedelta, None] = None
 ) -> str:
@@ -73,15 +73,15 @@ def create_refresh_token(
     return encoded_jwt
 
 
-denylist: set = set()
+denylist: list = []
 
 
 def delete_access_token(
     token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
 ):
-    if token in denylist:
-        denylist.add(token)
-        return {"deleted": True}
+    if token not in denylist:
+        denylist.append(token)
+        return {"detail": "Access token has been revoked"}
     else:
         return {"deleted": False}
 
