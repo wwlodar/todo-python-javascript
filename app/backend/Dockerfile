@@ -10,7 +10,7 @@ RUN apt install -y make \
                    libssl-dev \
                    libcurl4-openssl-dev
 
-COPY requirements.txt .
+COPY app/backend/requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY . ./
