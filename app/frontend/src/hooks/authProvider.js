@@ -11,21 +11,18 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const navigate = useNavigate();
-  const loginAction = async (data) => {
+  const loginAction = (response) => {
     try {
-      const response = fastapiclient.login(data.username, data.password)
-      const res = await response.json();
-      if (res.data) {
-        setUser(res.data.user);
-        setToken(res.token);
-        localStorage.setItem("token", res.token);
-        return data;
+      if (response.data) {
+        setUser(response.data.user);
+        setToken(response.token);
+        localStorage.setItem("token", response.token);
+        return;
       }
-      throw new Error(res.message);
-    } catch (err) {
-      console.error(err);
-      return data
-    }
+
+      } catch (err) {
+        console.error(err);
+      }
   };
 
   const logOut = () => {

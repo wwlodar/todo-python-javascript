@@ -50,7 +50,7 @@ def get_user_info(current_user: UserInDB = Depends(get_current_user)):
 
 
 @router.post("/login")
-async def login(
+def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     db: Session = Depends(get_db),
 ):
