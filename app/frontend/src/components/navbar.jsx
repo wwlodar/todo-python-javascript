@@ -29,6 +29,10 @@ const NavBar = () => {
                     <li><NavLink to='/'>Home</NavLink></li>
                     <li><NavLink to='/register'>Register</NavLink></li>
                     <li><NavLink to='/logout'>Logout</NavLink></li>
+                    <li>Add event</li>
+                    <li>See your events</li>
+                    <li>Add note</li>
+                    <li>See your notes</li>
                 </ul>
             </nav>
             </div>
