@@ -2,11 +2,24 @@ import React from "react"
 import { NavLink } from 'react-router-dom'
 import { useContext, createContext } from "react";
 import { useAuth } from "../hooks/authProvider";
-
+import {fastapiclient} from '../client.js'
 
 
 const NavBar = () => {
     const token = useAuth();
+    console.log(token)
+
+    const logout = () => {
+        fastapiclient.logout()
+        .then( () => {
+            auth.logOut()
+            navigate("/");
+        })
+        .catch( (err) => {
+            console.log(err)
+        });}
+
+
     if (!token) {
         return (
             <div className="position-absolute top-10 start-10">
@@ -28,7 +41,7 @@ const NavBar = () => {
                 <ul className="list-unstyled">
                     <li><NavLink to='/'>Home</NavLink></li>
                     <li><NavLink to='/register'>Register</NavLink></li>
-                    <li><NavLink to='/logout'>Logout</NavLink></li>
+                    <li><button type='button' onClick={logout}>Logout</button></li>
                     <li>Add event</li>
                     <li>See your events</li>
                     <li>Add note</li>

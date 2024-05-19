@@ -93,6 +93,12 @@ class FastAPIClient {
 			})
 	}
 
+	logout() {
+		return this.apiClient.get("/logout").then(({data}) => {
+			return data
+		})
+	}
+
 	fetchUser() {
 		return this.apiClient.get("/user").then(({data}) => {
 			localStorage.setItem("user", JSON.stringify(data))
