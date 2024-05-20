@@ -2,7 +2,7 @@ import {useState} from "react";
 import {Outlet, useNavigate} from "react-router-dom";
 import InputForm from '../../components/InputForm'
 import { useAuth } from "../../hooks/authProvider";
-import {fastapiclient} from '../../client'
+import {fastapiclient} from '../../client';
 
 const LoginUser = () => {
   const [error, setError] = useState({ email: '', password: '', username: '', confirmPassword: '' });

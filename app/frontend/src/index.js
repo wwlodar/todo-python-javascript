@@ -20,8 +20,8 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 export default function App() {
   return (
     <Router>
-      <NavBar/>
       <AuthProvider>
+      <NavBar/>
       <Routes>
           <Route path="/" element={<Home />} />
           <Route path="register/" element={<Register/>}/>
