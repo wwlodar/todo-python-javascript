@@ -26,8 +26,9 @@ class EventBase(BaseModel):
     user_id: str
 
 
-class EventCreate(EventBase):
+class EventCreate(BaseModel):
     date_added = datetime.now().date()
+    title: str
 
 
 class Event(EventBase):

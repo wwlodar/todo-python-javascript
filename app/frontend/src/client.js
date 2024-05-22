@@ -98,6 +98,20 @@ class FastAPIClient {
 			return data
 		})
 	}
+	createEvent(title){
+		var form_data = new FormData()
+		const item = {title}
+		for (var key in item) {
+			form_data.append(key, item[key])
+		}
+
+		return this.apiClient
+			.post("/events", form_data)
+			.then((resp) => {
+				return resp.data
+			})
+	}
+
 
 	fetchUser() {
 		return this.apiClient.get("/user").then(({data}) => {

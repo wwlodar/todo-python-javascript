@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app.backend.sql_app.models import Event, Note, User
-from app.backend.sql_app.schemas import EventCreate, NoteCreate
+from app.backend.sql_app.schemas import NoteCreate
 
 
 def get_user_by_email(db: Session, email: str):
@@ -27,8 +27,8 @@ def create_note(db: Session, note: NoteCreate, user_id: str):
     return note
 
 
-def create_event(db: Session, event: EventCreate, user_id: str):
-    event = Event(**event.dict(), user_id=user_id)
+def create_event(db: Session, event: Event):
+    event = Event(**event.dict())
     db.add(event)
     db.commit()
     db.refresh(event)
