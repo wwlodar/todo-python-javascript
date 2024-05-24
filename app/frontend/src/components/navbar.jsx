@@ -41,7 +41,7 @@ const NavBar = () => {
                 <ul className="list-unstyled">
                     <li><NavLink to='/'>Home</NavLink></li>
                     <li><button type='button' onClick={logout}>Logout</button></li>
-                    <li>Add event</li>
+                    <li><NavLink to='/add_event'>Add event</NavLink></li>
                     <li>See your events</li>
                     <li>Add note</li>
                     <li>See your notes</li>
