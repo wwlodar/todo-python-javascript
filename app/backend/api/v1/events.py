@@ -32,6 +32,8 @@ async def add_new_event(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_event = Event(title=data.title, user_id=current_user.user_id)
+    db_event = Event(
+        title=data.title, date=data.date, user_id=current_user.user_id
+    )
     event = create_event(db=db, event=db_event)
     return event

@@ -34,7 +34,7 @@ class Event(Base):
     event_id = Column(Integer, unique=True, primary_key=True)
     title = Column(String)
     happened = Column(Boolean, default=False)
-    date_added = Column(DateTime)
+    date = Column(DateTime)
 
     user_id = Column(String, ForeignKey("users.user_id"))
     user = relationship("User", back_populates="events")

@@ -27,12 +27,12 @@ class EventBase(BaseModel):
 
 
 class EventCreate(BaseModel):
-    date_added = datetime.now().date()
+    date: datetime
     title: str
 
 
 class Event(EventBase):
-    date_added: datetime
+    date: datetime
 
 
 class UserBase(BaseModel):

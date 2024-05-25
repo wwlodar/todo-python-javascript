@@ -98,9 +98,9 @@ class FastAPIClient {
 			return data
 		})
 	}
-	createEvent(title){
+	createEvent(title, date){
 		var form_data = new FormData()
-		const item = {title}
+		const item = {title, date}
 		for (var key in item) {
 			form_data.append(key, item[key])
 		}
