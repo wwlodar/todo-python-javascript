@@ -29,9 +29,10 @@ target_metadata = Base.metadata
 def get_url():
     user = os.getenv("POSTGRES_USER", "postgres")
     password = os.getenv("POSTGRES_PASSWORD", "postgres")
-    server = os.getenv("POSTGRES_SERVER", "db")
+    server = os.getenv("POSTGRES_SERVER", "localhost")
     db = os.getenv("POSTGRES_DB", "test_db")
-    return f"postgresql://{user}:{password}@{server}:5432/{db}"
+    return f"postgresql://{user}:{password}@localhost:5432/{db}"
+    # return "postgresql://postgres:postgres@db:5432/test_db"
 
 
 def run_migrations_offline() -> None:
