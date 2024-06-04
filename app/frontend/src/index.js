@@ -7,11 +7,11 @@ import Home from "./pages/home/index";
 import Event from "./pages/event/index";
 import Register from "./pages/register/index";
 import Login from "./pages/login/index";
+import AddEvent from "./pages/add_event/index";
+
 import NavBar from "./components/navbar"
 import AuthProvider from './hooks/authProvider';
 import PrivateRoute from "./router/route";
-import AddEvent from "./pages/add_event/index";
-
 
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
