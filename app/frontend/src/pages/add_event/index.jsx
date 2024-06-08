@@ -99,13 +99,14 @@ const AddEventForm = () => {
   </form>)}}
 
 
-const GetAllEvents = () => {
+const AddNewEvent = () => {
   return (
     <div className="App">
-      <h2>AddEventForm</h2>
+      <h2>Add New Event</h2>
+      <a><AddEventForm/></a>
 
     </div>
   );
 };
 
-export default GetAllEvents;
+export default AddNewEvent;
