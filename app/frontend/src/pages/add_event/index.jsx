@@ -21,7 +21,7 @@ const AddEventForm = () => {
     .catch( (err) => {
       setLoading(false)
       setBackendError(err);
-    });
+    }); };
 
 
   const onInputChange = e => {
@@ -96,7 +96,7 @@ const AddEventForm = () => {
         <h1>{backendError.message}</h1>}
         </div>
 
-  </form>)}}
+  </form>) }
 
 
 const AddNewEvent = () => {
