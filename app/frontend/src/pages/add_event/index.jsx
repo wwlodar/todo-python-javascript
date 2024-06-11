@@ -5,7 +5,6 @@ import InputForm from '../../components/InputForm'
 
 
 const AddEventForm = () => {
-  const [events, setEvents] = useState([]);
   const [error, setError] = useState({ title: '', date: ''});
   const [backendError, setBackendError] = useState('');
   let [isDisabled, setDisabledState] = useState(false);
@@ -15,9 +14,8 @@ const AddEventForm = () => {
   const onSendingEvent = (e) => {
     e.preventDefault();
     setLoading(true)
-    {fastapiclient.createEvent(title, date)
-    .then( (response) => {
-      setEvents(response)})
+    {fastapiclient.createEvent(eventForm.title, eventForm.date)
+    .then( () => {})
     .catch( (err) => {
       setLoading(false)
       setBackendError(err);
