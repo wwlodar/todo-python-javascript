@@ -2,24 +2,25 @@ import {useState, useEffect} from "react";
 import {Outlet} from "react-router-dom";
 import {fastapiclient} from '../../client'
 import InputForm from '../../components/InputForm'
+import DatePicker from "react-datepicker";
 
+import "react-datepicker/dist/react-datepicker.css";
 
 const AddEventForm = () => {
   const [error, setError] = useState({ title: '', date: ''});
   const [backendError, setBackendError] = useState('');
   let [isDisabled, setDisabledState] = useState(false);
-  const [eventForm, setEventForm] =  useState({ title: '', date: ''});
+  const [eventForm, setEventForm] =  useState({ title: '', date: new Date()});
+
 
 
   const onSendingEvent = (e) => {
     e.preventDefault();
-    setLoading(true)
     {fastapiclient.createEvent(eventForm.title, eventForm.date)
     .then( () => {})
     .catch( (err) => {
-      setLoading(false)
       setBackendError(err);
-    }); };
+    }); }};
 
 
   const onInputChange = e => {
@@ -66,7 +67,7 @@ const AddEventForm = () => {
     }
 
 
-  }
+
   return (
   <form onSubmit={(e) => onSendingEvent(e)}>
         <InputForm
@@ -78,17 +79,14 @@ const AddEventForm = () => {
             value={eventForm.title}
             onChange={onInputChange}
           />
-          <InputForm
-            type={"text"}
-            name={"date"}
-            label={"date"}
-            required
-            error={error.date}
-            value={eventForm.date}
-            onChange={onInputChange}
-          />
+          <DatePicker
+  selected={eventForm.date}
+  onChange={onInputChange}
+  value={eventForm.date}
+  required
+/>
 
-        <button title={"Add event"} error={error} loading={loading} disabled={isDisabled} className={`rounded w-full mt-4 p-1`}>Add</button>
+        <button title={"Add event"} error={error} disabled={isDisabled} className={`rounded w-full mt-4 p-1`}>Add</button>
         <div>
         {(backendError !== '') &&
         <h1>{backendError.message}</h1>}
