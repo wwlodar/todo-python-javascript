@@ -79,11 +79,13 @@ const AddEventForm = () => {
             value={eventForm.title}
             onChange={onInputChange}
           />
-          <DatePicker
+          <InputForm
+          render= {({field}) => (
+            <DatePicker
   selected={eventForm.date}
   onChange={onInputChange}
   value={eventForm.date}
-  required
+  required/>)}
 />
 
         <button title={"Add event"} error={error} disabled={isDisabled} className={`rounded w-full mt-4 p-1`}>Add</button>
