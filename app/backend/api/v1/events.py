@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app.backend.api.v1.auth import get_current_user
 from app.backend.sql_app.crud import create_event, get_event, get_user_events
 from app.backend.sql_app.main import get_db
-from app.backend.sql_app.schemas import Event, EventCreate, User
+from app.backend.sql_app.schemas import EventCreate, EventUserCreate, User
 
 router = APIRouter()
 
@@ -32,8 +32,9 @@ async def add_new_event(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_event = Event(
+    db_event = EventUserCreate(
         title=data.title, date=data.date, user_id=current_user.user_id
     )
+
     event = create_event(db=db, event=db_event)
     return event
