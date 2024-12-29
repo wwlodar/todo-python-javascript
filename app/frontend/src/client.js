@@ -13,12 +13,12 @@ function localStorageTokenInterceptor(config) {
 	const tokenString = localStorage.getItem("token")
 
 	if (tokenString) {
-		const token = JSON.parse(tokenString)
-		const decodedAccessToken = jwtDecode(token.access_token)
+		const token = tokenString
+		const decodedAccessToken = jwtDecode(token)
 		const isAccessTokenValid =
 			moment.unix(decodedAccessToken.exp).toDate() > new Date()
 		if (isAccessTokenValid) {
-			headers["Authorization"] = `Bearer ${token.access_token}`
+			headers["Authorization"] = `Bearer ${token}`
 		} else {
 			alert('Your login session has expired')
 		}
@@ -26,6 +26,8 @@ function localStorageTokenInterceptor(config) {
 	config["headers"] = headers
 	return config
 }
+// {"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ3d3d3dyIsImV4cCI6MTczNTQ3NDY1MH0.Zf21cX_x3L4_MpNJMgYk21KkoCFXO2nC_VkZoB49WkQ
+ //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ3d3d3dyIsImV4cCI6MTczNTQ3NTUyMH0.QRZ8FVIz8-MdTr_a-t2sAmI__2PQ7sHLntBKTVf5ONA
 
 
 class FastAPIClient {
@@ -94,10 +96,13 @@ class FastAPIClient {
 	}
 
 	logout() {
-		return this.apiClient.get("/logout").then(({data}) => {
-			return data
+		return this.apiClient
+		.get("/logout")
+		.then((resp) => {
+			return resp.data
 		})
 	}
+
 	createEvent(title, date){
 		var form_data = new FormData()
 		const item = {title, date}

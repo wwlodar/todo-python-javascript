@@ -85,6 +85,7 @@ const AddEventForm = () => {
   selected={eventForm.date}
   onChange={onInputChange}
   value={eventForm.date}
+  name={"date"}
   required/>)}
 />
 

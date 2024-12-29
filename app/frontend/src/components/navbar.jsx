@@ -9,16 +9,16 @@ const NavBar = () => {
     const auth = useAuth();
     console.log(auth);
 
-    const logout = () => {
+    function logout () {
         fastapiclient.logout()
-        .then( () => {
+        .then( (response) => {
             auth.logOut()
             navigate("/");
+            console.log(response)
         })
-        .catch( (err) => {
-            console.log(err)
+        .catch( (error) => {
+            console.log(error)
         });}
-
 
     if (!auth.token) {
         return (
