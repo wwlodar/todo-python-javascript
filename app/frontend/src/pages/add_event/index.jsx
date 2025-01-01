@@ -10,13 +10,16 @@ const AddEventForm = () => {
   const [error, setError] = useState({ title: '', date: ''});
   const [backendError, setBackendError] = useState('');
   let [isDisabled, setDisabledState] = useState(false);
-  const [eventForm, setEventForm] =  useState({ title: '', date: new Date()});
+  const [title, setTitle] = useState('')
+  const [date, setDate] = useState(new Date());
 
 
 
   const onSendingEvent = (e) => {
+    console.log(title, date)
     e.preventDefault();
-    {fastapiclient.createEvent(eventForm.title, eventForm.date)
+
+    {fastapiclient.createEvent(title, date)
     .then( () => {})
     .catch( (err) => {
       setBackendError(err);
@@ -25,7 +28,7 @@ const AddEventForm = () => {
 
   const onInputChange = e => {
       const { name, value } = e.target;
-      setEventForm(prev => ({
+      setTitle(prev => ({
         ...prev,
         [name]: value
       }));
@@ -73,21 +76,12 @@ const AddEventForm = () => {
         <InputForm
             type={"text"}
             name={"title"}
-            label={"title"}
             required
             error={error.title}
-            value={eventForm.title}
+            value={title}
             onChange={onInputChange}
           />
-          <InputForm
-          render= {({field}) => (
-            <DatePicker
-  selected={eventForm.date}
-  onChange={onInputChange}
-  value={eventForm.date}
-  name={"date"}
-  required/>)}
-/>
+            <DatePicker selected={date} onChange={(date) => setDate(date)} ></DatePicker>
 
         <button title={"Add event"} error={error} disabled={isDisabled} className={`rounded w-full mt-4 p-1`}>Add</button>
         <div>

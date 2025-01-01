@@ -21,6 +21,8 @@ function localStorageTokenInterceptor(config) {
 			headers["Authorization"] = `Bearer ${token}`
 		} else {
 			alert('Your login session has expired')
+			localStorage.removeItem("token")
+
 		}
 	}
 	config["headers"] = headers
@@ -97,7 +99,7 @@ class FastAPIClient {
 
 	logout() {
 		return this.apiClient
-		.get("/logout")
+		.post("/logout")
 		.then((resp) => {
 			return resp.data
 		})
@@ -109,6 +111,7 @@ class FastAPIClient {
 		for (var key in item) {
 			form_data.append(key, item[key])
 		}
+		console.log(form_data)
 
 		return this.apiClient
 			.post("/events", form_data)
