@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import Layout from "./pages/layout/index";
 import Home from "./pages/home/index";

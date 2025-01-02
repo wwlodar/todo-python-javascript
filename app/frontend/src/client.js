@@ -1,6 +1,4 @@
 import config from "./config"
-import {useState, useEffect} from 'react';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 import jwtDecode from "jwt-decode"
@@ -51,7 +49,7 @@ class FastAPIClient {
 				"Access-Control-Allow-Headers": "*",
 				"Access-Control-Allow-Origin": "*",
 				"Access-Control-Allow-Methods": "*",
-			  },
+			},
 
 		}
 

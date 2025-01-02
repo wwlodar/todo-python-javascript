@@ -1,8 +1,7 @@
+import React from 'react';
 import { useContext, createContext } from "react";
-import {fastapiclient} from '../client'
 import {useState} from "react";
-import {Outlet, Link, useNavigate} from "react-router-dom";
-
+import PropTypes from 'prop-types';
 
 const AuthContext = createContext();
 
@@ -35,6 +34,9 @@ const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 
+};
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default AuthProvider;

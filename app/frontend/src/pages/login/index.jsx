@@ -1,5 +1,6 @@
 import {useState} from "react";
-import {Outlet, useNavigate} from "react-router-dom";
+import React from 'react';
+import {useNavigate} from "react-router-dom";
 import InputForm from '../../components/InputForm'
 import { useAuth } from "../../hooks/authProvider";
 import {fastapiclient} from '../../client';
@@ -95,10 +96,9 @@ const LoginUser = () => {
             onChange={onInputChange}
           />
 
-        <button title={"Login"} error={error} loading={loading} disabled={isDisabled} className={`rounded w-full mt-4 p-1`}>Login</button>
+        <button title={"Login"} loading={loading} disabled={isDisabled} className={`rounded w-full mt-4 p-1`}>Login</button>
         <div>
-        {(backendError !== '') &&
-        <h1>{backendError.message}</h1>}
+        {backendError && <h1>{backendError.message}</h1>}
         </div>
 
   </form>)}

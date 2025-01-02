@@ -1,11 +1,13 @@
+import React from 'react';
 import {useState, useEffect} from "react";
 import {Outlet} from "react-router-dom";
 import {fastapiclient} from '../../client'
 
 
-const GetEvent = ({id}) => {
+
+const GetEvent = ({ id }) => {
   const [events, setEvents] = useState([]);
-  const eventId = id
+  const eventId = id;
 
   useEffect(() => {fastapiclient.getEventById(eventId)
       .then((response) => setEvents(response));

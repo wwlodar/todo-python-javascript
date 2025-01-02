@@ -1,5 +1,6 @@
+import React from 'react';
 import {useState} from "react";
-import {Outlet, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {fastapiclient} from '../../client'
 import InputForm from '../../components/InputForm'
 
@@ -124,10 +125,9 @@ const SignUp = () => {
             onChange={onInputChange}
           />
 
-        <button title={"Create Account"} error={error} loading={loading} disabled={isDisabled} className={`rounded w-full mt-4 p-1`}>Create Account</button>
+        <button title={"Create Account"} loading={loading} disabled={isDisabled} className={`rounded w-full mt-4 p-1`}>Create Account</button>
         <div>
-        {(backendError !== '') &&
-        <h1>{backendError.message}</h1>}
+        {backendError && <h1>{backendError.message}</h1>}
         </div>
 
   </form>)}
