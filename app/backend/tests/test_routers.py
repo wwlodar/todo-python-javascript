@@ -182,5 +182,5 @@ def test_create_new_event(test_db):
     assert "date" in response.json()
     assert response.json()["event_id"] == 1
     assert response.json()["title"] == "Event title"
-    assert response.json()["happened"] == False
+    assert response.json()["happened"] is False
     assert "user_id" in response.json()
