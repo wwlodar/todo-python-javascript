@@ -45,18 +45,18 @@ const AddEventForm = () => {
     }); }};
 
 
-  const onInputChange = e => {
-      const { name, value } = e.target;
+  const onInputChange = (e) => {
+      const { name, value } = e;
       if (name === "title") {
         setTitle(value);
       }
       else if (name === "date") {
         setDate(value);
-      validateInput(e);
     }
+    validateInput(e);}
 
     const validateInput = e => {
-      let { name, value } = e.target;
+      let { name, value } = e;
       setError(prev => {
         const stateObj = { ...prev, [name]: "" };
 
@@ -78,7 +78,6 @@ const AddEventForm = () => {
             }
             else {
               setDisabledState(false);
-              console.log(date)
             }
             break;
 
@@ -102,7 +101,7 @@ const AddEventForm = () => {
             required
             error={error.title}
             value={title}
-            onChange={onInputChange}
+            onChange={(e) => onInputChange({ name: "title", value: e.target.value })}
           />
             <DatePicker
             name="date"
@@ -111,7 +110,7 @@ const AddEventForm = () => {
             justify="center"
             dateFormat="yyyy-MM-dd"
             selected={date}
-            onChange={onInputChange} />
+            onChange={(date) => onInputChange({ name: "date", value: date })} />
 
         <button title={"Add event"} disabled={isDisabled} className={`rounded w-full mt-4 p-1`}>Add</button>
         <div>
@@ -120,7 +119,7 @@ const AddEventForm = () => {
 
     </form>
     );
-  };}
+  };
 
 
 const AddNewEvent = () => {

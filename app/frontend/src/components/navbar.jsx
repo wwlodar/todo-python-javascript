@@ -1,20 +1,21 @@
 import React from "react"
 import { NavLink } from 'react-router-dom'
-import { useContext, createContext } from "react";
 import { useAuth } from "../hooks/authProvider";
 import {fastapiclient} from '../client.js';
-
+import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
     const auth = useAuth();
     console.log(auth);
+    const navigate = useNavigate();
 
     function logout () {
         fastapiclient.logout()
         .then( (response) => {
             auth.logOut()
-            navigate("/");
+            navigate('/');
             console.log(response)
+            window.location.reload()
         })
         .catch( (error) => {
             console.log(error)
@@ -49,7 +50,7 @@ const NavBar = () => {
             </nav>
             </div>
         );
-    };
+    }
    };
 
 

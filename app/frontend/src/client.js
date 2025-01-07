@@ -7,7 +7,6 @@ import * as moment from "moment"
 
 // every request is intercepted and has auth header injected.
 function localStorageTokenInterceptor(config) {
-	let headers = {}
 	const tokenString = localStorage.getItem("token")
 
 	if (tokenString) {
@@ -16,19 +15,15 @@ function localStorageTokenInterceptor(config) {
 		const isAccessTokenValid =
 			moment.unix(decodedAccessToken.exp).toDate() > new Date()
 		if (isAccessTokenValid) {
-			headers["Authorization"] = `Bearer ${token}`
+			config["headers"]["Authorization"] = `Bearer ${token}`
 		} else {
 			alert('Your login session has expired')
 			localStorage.removeItem("token")
-
+			window.location.reload()
 		}
 	}
-	config["headers"] = headers
 	return config
 }
-// {"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ3d3d3dyIsImV4cCI6MTczNTQ3NDY1MH0.Zf21cX_x3L4_MpNJMgYk21KkoCFXO2nC_VkZoB49WkQ
- //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ3d3d3dyIsImV4cCI6MTczNTQ3NTUyMH0.QRZ8FVIz8-MdTr_a-t2sAmI__2PQ7sHLntBKTVf5ONA
-
 
 class FastAPIClient {
 	constructor(overrides) {
@@ -48,7 +43,7 @@ class FastAPIClient {
 				"Content-type": "application/json",
 				"Access-Control-Allow-Headers": "*",
 				"Access-Control-Allow-Origin": "*",
-				"Access-Control-Allow-Methods": "*",
+				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
 			},
 
 		}
@@ -109,8 +104,7 @@ class FastAPIClient {
 		for (var key in item) {
 			form_data.append(key, item[key])
 		}
-		console.log(form_data)
-
+		console.log("FORM DATA", form_data)
 		return this.apiClient
 			.post("/events", form_data)
 			.then((resp) => {
