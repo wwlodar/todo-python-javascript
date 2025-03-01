@@ -19,6 +19,6 @@ module.exports = {
     ],
     "rules": {
         "no-unused-vars": "warn",
-        "ethers": 1
+        //"ethers": 1
     }
 };
