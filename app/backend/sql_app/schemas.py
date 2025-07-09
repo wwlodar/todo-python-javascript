@@ -31,12 +31,6 @@ class EventCreate(BaseModel):
     title: str
 
 
-class EventUserCreate(BaseModel):
-    date: datetime
-    title: str
-    user_id: str
-
-
 class Event(EventBase):
     date: datetime
 
