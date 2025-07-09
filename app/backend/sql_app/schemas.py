@@ -6,7 +6,7 @@ from pydantic import BaseModel, EmailStr
 
 class NoteBase(BaseModel):
     title: str
-    id: int
+    note_id: int
     done: bool
     user_id: str
 
@@ -21,7 +21,7 @@ class Note(NoteBase):
 
 class EventBase(BaseModel):
     title: str
-    id: int
+    event_id: int
     happened: bool
     user_id: str
 

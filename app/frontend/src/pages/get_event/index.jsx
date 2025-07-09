@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {useState, useEffect} from "react";
 import {Outlet} from "react-router-dom";
 import {fastapiclient} from '../../client'
@@ -16,6 +17,10 @@ const GetEvent = ({ id }) => {
   return (<a>{events}</a>
   );
 }
+
+GetEvent.propTypes = {
+  id: PropTypes.number.isRequired,
+};
 
 
 const Layout = () => {

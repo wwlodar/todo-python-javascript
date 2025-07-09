@@ -1,135 +1,135 @@
-import React from 'react';
-import {useState} from "react";
-import {fastapiclient} from '../../client'
-import InputForm from '../../components/InputForm'
-import DatePicker from "react-datepicker";
-
+import React, { useEffect, useState } from 'react';
+import { fastapiclient } from '../../client';
+import InputForm from '../../components/InputForm';
+import DatePicker from 'react-datepicker';
+import { useLocation } from 'react-router-dom';
 import "react-datepicker/dist/react-datepicker.css";
+import PropTypes from 'prop-types';
 
-/**
- * AddEventForm component renders a form to add a new event with a title and date.
- *
- * State:
- * - error: An object containing error messages for the title and date fields.
- * - backendError: A string containing any error message returned from the backend.
- * - isDisabled: A boolean indicating whether the submit button should be disabled.
- * - title: A string representing the title of the event.
- * - date: A Date object representing the date of the event.
- *
- * Functions:
- * - onSendingEvent: Handles the form submission, sends the event data to the backend, and handles any errors.
- * - onInputChange: Handles changes to the input fields, updates the title state, and validates the input.
- * - validateInput: Validates the input fields and updates the error state and the disabled state of the submit button.
- *
- * Returns:
- * - A form with input fields for the title and date, a submit button, and error messages if any.
- */
-const AddEventForm = () => {
-  const [error, setError] = useState({ title: '', date: ''});
-  const [backendError, setBackendError] = useState('');
-  let [isDisabled, setDisabledState] = useState(true);
-  const [title, setTitle] = useState('')
-  // format to 2024-06-24T15:25:23+02:00
-  const [date, setDate] = useState(new Date());
-
-
-
-  const onSendingEvent = (e) => {
-    console.log(title, date)
-    e.preventDefault();
-
-    {fastapiclient.createEvent(title, date.toISOString())
-    .then( () => {})
-    .catch( (err) => {
-      setBackendError(err);
-    }); }};
-
-
-  const onInputChange = (e) => {
-      const { name, value } = e;
-      if (name === "title") {
-        setTitle(value);
-      }
-      else if (name === "date") {
-        setDate(value);
-    }
-    validateInput(e);}
-
-    const validateInput = e => {
-      let { name, value } = e;
-      setError(prev => {
-        const stateObj = { ...prev, [name]: "" };
-
-        switch (name) {
-          case "title":
-            if (!value) {
-              stateObj["title"] = "Title cannot be empty";
-              setDisabledState(true);}
-            else {
-              setDisabledState(false);
-            }
-            break;
-
-
-          case "date":
-            if (!value) {
-              stateObj[name] = "Date cannot be empty";
-              setDisabledState(true);
-            }
-            else {
-              setDisabledState(false);
-            }
-            break;
-
-
-          default:
-            break;
-        }
-
-        return stateObj;
-      });
-    }
-
-
-
+const EventDisplay = ({ event }) => {
+  if (!event) return null;
   return (
-  <form onSubmit={(e) => onSendingEvent(e)}>
-        <InputForm
-            type={"text"}
-            name={"title"}
-            label={"title"}
-            required
-            error={error.title}
-            value={title}
-            onChange={(e) => onInputChange({ name: "title", value: e.target.value })}
-          />
-            <DatePicker
-            name="date"
-            required
-            placeholderText="Date"
-            justify="center"
-            dateFormat="yyyy-MM-dd"
-            selected={date}
-            onChange={(date) => onInputChange({ name: "date", value: date })} />
-
-        <button title={"Add event"} disabled={isDisabled} className={`rounded w-full mt-4 p-1`}>Add</button>
-        <div>
-        {backendError && <h1>{backendError.message}</h1>}
-        </div>
-
-    </form>
-    );
-  };
-
-
-const AddNewEvent = () => {
-  return (
-    <div className="App">
-      <h2>Add New Event</h2>
-      <a><AddEventForm/></a>
-
+    <div className="event-display">
+      <h3>Created Event</h3>
+      <p><strong>Title:</strong> {event.title}</p>
+      <p><strong>Date:</strong> {new Date(event.date).toLocaleString()}</p>
+      <p><strong>Happened:</strong> {event.happened ? 'Yes' : 'No'}</p>
+      <p><strong>User ID:</strong> {event.user_id}</p>
+      <p><strong>Event ID:</strong> {event.event_id}</p>
     </div>
   );
 };
+EventDisplay.propTypes = {
+  event: PropTypes.shape({
+    title: PropTypes.string,
+    date: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
+    happened: PropTypes.bool,
+    user_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    event_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  }),
+};
+
+const AddEventForm = () => {
+  const location = useLocation();
+  const [error, setError] = useState({ title: '', date: '' });
+  const [backendError, setBackendError] = useState('');
+  const [isDisabled, setDisabledState] = useState(true);
+  const [title, setTitle] = useState('');
+  const [date, setDate] = useState(new Date());
+  const [createdEvent, setCreatedEvent] = useState(null);
+
+  useEffect(() => {
+    setBackendError('');
+  }, [location.pathname]);
+
+  // Validation helper to check if all inputs are valid
+  const validateAll = (titleVal, dateVal) => {
+    return titleVal.trim().length > 0 && dateVal instanceof Date && !isNaN(dateVal);
+  };
+
+  const validateInput = ({ name, value }) => {
+    setError(prev => {
+      const stateObj = { ...prev, [name]: '' };
+
+      if (name === "title") {
+        if (!value || value.trim() === '') {
+          stateObj.title = "Title cannot be empty";
+        }
+      } else if (name === "date") {
+        if (!value) {
+          stateObj.date = "Date cannot be empty";
+        }
+      }
+      // Disable if any errors exist
+      const hasError = Object.values(stateObj).some(msg => msg !== '');
+      setDisabledState(hasError || !validateAll(name === 'title' ? value : title, name === 'date' ? value : date));
+      return stateObj;
+    });
+  };
+
+  const onInputChange = ({ name, value }) => {
+    if (name === 'title') {
+      setTitle(value);
+    } else if (name === 'date') {
+      setDate(value);
+    }
+    validateInput({ name, value });
+  };
+
+  const onSendingEvent = (e) => {
+    e.preventDefault();
+    setBackendError('');
+    setCreatedEvent(null);
+    fastapiclient.createEvent(title, date.toISOString())
+      .then((response) => {
+        setCreatedEvent(response);
+      })
+      .catch((err) => {
+        setBackendError(err.response?.data || err.message || 'Unknown error');
+      });
+  };
+
+  return (
+    <form onSubmit={onSendingEvent}>
+      <InputForm
+        type="text"
+        name="title"
+        label="Title"
+        required
+        error={error.title}
+        value={title}
+        onChange={(e) => onInputChange({ name: "title", value: e.target.value })}
+      />
+      <DatePicker
+        name="date"
+        required
+        placeholderText="Date"
+        dateFormat="yyyy-MM-dd"
+        selected={date}
+        onChange={(date) => onInputChange({ name: "date", value: date })}
+      />
+
+      <button
+        title="Add event"
+        disabled={isDisabled}
+        className="rounded w-full mt-4 p-1"
+      >
+        Add
+      </button>
+
+      <div>
+        {backendError && <h3 className="error-message">{backendError}</h3>}
+        <EventDisplay event={createdEvent} />
+      </div>
+    </form>
+  );
+};
+
+const AddNewEvent = () => (
+  <div className="App">
+    <h2>Add New Event</h2>
+    <AddEventForm />
+  </div>
+);
 
 export default AddNewEvent;

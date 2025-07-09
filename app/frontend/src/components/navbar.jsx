@@ -43,7 +43,7 @@ const NavBar = () => {
                     <li><NavLink to='/'>Home</NavLink></li>
                     <li><button type='button' onClick={logout}>Logout</button></li>
                     <li><NavLink to='/add_event'>Add event</NavLink></li>
-                    <li>See your events</li>
+                    <li><NavLink to='/get_events'>See your events</NavLink></li>
                     <li>Add note</li>
                     <li>See your notes</li>
                 </ul>

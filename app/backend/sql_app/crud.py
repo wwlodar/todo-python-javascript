@@ -28,7 +28,6 @@ def create_note(db: Session, note: NoteCreate, user_id: str):
 
 
 def create_event(db: Session, event: Event):
-    event = Event(**event.dict())
     db.add(event)
     db.commit()
     db.refresh(event)

@@ -1,8 +1,5 @@
-import {useState, useEffect} from "react";
-import {Outlet, Link, useNavigate} from "react-router-dom";
-import {fastapiclient, GetEventById} from '../../client'
-import InputForm from '../../components/InputForm'
-import NavBar from '../../components/navbar'
+import React from 'react';
+import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
 
 
@@ -12,16 +9,16 @@ const Layout =({children}) =>{
       <div className="container text-center">
   <Row>
 
-    <div class="col order-first">
-      <a>DUPA</a>
+    <div className="col order-first">
+      <a></a>
     </div>
 
-    <div class="col">
-      <div class="mt-2 mb-5">DUPA 2 </div>
+    <div className="col">
+      <div className="mt-2 mb-5"></div>
     </div>
 
-    <div class="col order-last">
-      <a>DUPA 3</a>
+    <div className="col order-last">
+      <a>Notes & Events</a>
     </div>
 
   </Row>
@@ -31,5 +28,8 @@ const Layout =({children}) =>{
       </>
   )
 }
+Layout.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export default Layout;
