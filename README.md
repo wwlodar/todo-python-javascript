@@ -28,7 +28,8 @@ The backend is built using FastAPI and SQLAlchemy. It includes user authenticati
 
 ### Database Migrations
 
-Database migrations are managed using Alembic. To create a new migration, run:
+Database migrations are managed using Alembic. To create a new migration,
+choose correct ```get_url``` function in ```env.py``` file while having Docker db containter running and run:
 ```sh
 alembic revision --autogenerate -m "Migration message"
 alembic upgrade head

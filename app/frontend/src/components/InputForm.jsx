@@ -1,8 +1,8 @@
 import React from 'react';
-import inputlabel from '../components/css/inputForm.css'
+import PropTypes from 'prop-types';
 
 function InputForm({label, name, error, value, onChange, type = "text"}) {
-  return  <div class="row">
+  return  <div className="row justify-content-center">
             <inputlabel className="col-form-label col-sm-2" htmlFor={name}>{label}</inputlabel>
             <input
                 type={type}
@@ -15,5 +15,16 @@ function InputForm({label, name, error, value, onChange, type = "text"}) {
 
         </div>
 }
-
+InputForm.propTypes = {
+  label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  error: PropTypes.string,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  type: PropTypes.string,
+};
+InputForm.defaultProps = {
+  error: '',
+  type: 'text',
+};
 export default InputForm;

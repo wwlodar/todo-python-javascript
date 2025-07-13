@@ -14,7 +14,6 @@ const EventDisplay = ({ event }) => {
       <p><strong>Title:</strong> {event.title}</p>
       <p><strong>Date:</strong> {new Date(event.date).toLocaleString()}</p>
       <p><strong>Happened:</strong> {event.happened ? 'Yes' : 'No'}</p>
-      <p><strong>User ID:</strong> {event.user_id}</p>
       <p><strong>Event ID:</strong> {event.event_id}</p>
     </div>
   );
@@ -102,10 +101,13 @@ const AddEventForm = () => {
       />
       <DatePicker
         name="date"
+        label="Date"
         required
-        placeholderText="Date"
-        dateFormat="yyyy-MM-dd"
+        placeholderText="Time & Date"
+        dateFormat="yyyy-MM-dd  h:mm aa"
         selected={date}
+        showTimeSelect
+        timeIntervals={30}
         onChange={(date) => onInputChange({ name: "date", value: date })}
       />
 

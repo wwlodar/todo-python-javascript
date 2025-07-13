@@ -1,3 +1,6 @@
+import datetime
+from datetime import timezone
+
 from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
@@ -33,8 +36,23 @@ class Event(Base):
 
     event_id = Column(Integer, unique=True, primary_key=True)
     title = Column(String)
-    happened = Column(Boolean, default=False)
     date = Column(DateTime)
 
     user_id = Column(String, ForeignKey("users.user_id"))
     user = relationship("User", back_populates="events")
+
+    def to_dict(self):
+        dt_utc = self.date.replace(tzinfo=timezone.utc)
+        return {
+            "event_id": self.event_id,
+            "title": self.title,
+            "happened": self.happened,
+            "date": dt_utc.isoformat(),
+            "user_id": self.user_id,
+        }
+
+    @property
+    def happened(self):
+        return self.date.replace(tzinfo=timezone.utc) <= datetime.datetime.now(
+            timezone.utc
+        )

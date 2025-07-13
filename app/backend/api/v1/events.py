@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
@@ -5,12 +7,12 @@ from app.backend.api.v1.auth import get_current_user
 from app.backend.sql_app.crud import create_event, get_event, get_user_events
 from app.backend.sql_app.main import get_db
 from app.backend.sql_app.models import Event as EventModel
-from app.backend.sql_app.schemas import EventCreate, User
+from app.backend.sql_app.schemas import EventCreate, EventResponse, User
 
 router = APIRouter()
 
 
-@router.get("/events")
+@router.get("/events", response_model=List[EventResponse])
 async def get_user_events_from_db(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -18,7 +20,7 @@ async def get_user_events_from_db(
     return get_user_events(db=db, user_id=current_user.user_id)
 
 
-@router.get("/event/{event_id}")
+@router.get("/event/{event_id}", response_model=EventResponse)
 async def get_one_event(event_id: int, db: Session = Depends(get_db)):
     event = get_event(db=db, event_id=event_id)
     if event:
@@ -27,7 +29,7 @@ async def get_one_event(event_id: int, db: Session = Depends(get_db)):
         return "None"
 
 
-@router.post("/events")
+@router.post("/events", response_model=EventResponse)
 async def add_new_event(
     data: EventCreate,
     current_user: User = Depends(get_current_user),
@@ -37,7 +39,6 @@ async def add_new_event(
         title=data.title,
         date=data.date,
         user_id=current_user.user_id,
-        happened=False,
     )
 
     event = create_event(db=db, event=db_event)

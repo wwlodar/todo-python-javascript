@@ -1,7 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Union
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, validator
 
 
 class NoteBase(BaseModel):
@@ -22,7 +22,6 @@ class Note(NoteBase):
 class EventBase(BaseModel):
     title: str
     event_id: int
-    happened: bool
     user_id: str
 
 
@@ -33,6 +32,35 @@ class EventCreate(BaseModel):
 
 class Event(EventBase):
     date: datetime
+
+
+class EventResponse(BaseModel):
+    event_id: int
+    title: str
+    date: datetime
+    user_id: str
+    happened: bool
+
+    class Config:
+        orm_mode = True
+
+    @validator("date", pre=True)
+    def attach_utc_timezone(cls, v):
+        # v can be datetime or string, handle both
+        if isinstance(v, datetime):
+            if v.tzinfo is None:
+                return v.replace(tzinfo=timezone.utc)
+            return v
+        # if string, parse and set tzinfo, or return as is
+        return v
+
+    @validator("happened", always=True)
+    def compute_happened(cls, v, values):
+        dt = values.get("date")
+        if dt:
+            now = datetime.now(timezone.utc)
+            return dt <= now
+        return False
 
 
 class UserBase(BaseModel):
