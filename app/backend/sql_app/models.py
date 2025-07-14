@@ -30,6 +30,16 @@ class Note(Base):
     user_id = Column(String, ForeignKey("users.user_id"))
     user = relationship("User", back_populates="notes")
 
+    def to_dict(self):
+        dt_utc = self.date_added.replace(tzinfo=timezone.utc)
+        return {
+            "note_id": self.note_id,
+            "title": self.title,
+            "done": self.done,
+            "date_added": dt_utc.isoformat(),
+            "user_id": self.user_id,
+        }
+
 
 class Event(Base):
     __tablename__ = "events"

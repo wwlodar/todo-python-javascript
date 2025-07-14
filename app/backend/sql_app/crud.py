@@ -19,8 +19,7 @@ def create_user(db: Session, user: User):
     return user
 
 
-def create_note(db: Session, note: NoteCreate, user_id: str):
-    note = Note(**note.dict(), user_id=user_id)
+def create_note(db: Session, note: NoteCreate):
     db.add(note)
     db.commit()
     db.refresh(note)

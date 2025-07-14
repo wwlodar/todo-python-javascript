@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from typing import List, Union
+from typing import Union
 
 from pydantic import BaseModel, EmailStr, validator
 
@@ -15,23 +15,24 @@ class NoteCreate(NoteBase):
     date_added = datetime.now().date()
 
 
-class Note(NoteBase):
+class NoteUpdate(BaseModel):
+    done = bool
+
+
+class NoteResponse(BaseModel):
     date_added: datetime
-
-
-class EventBase(BaseModel):
-    title: str
-    event_id: int
     user_id: str
+    done: bool
+    title: str
+    note_id: int
+
+    class Config:
+        orm_mode = True
 
 
 class EventCreate(BaseModel):
     date: datetime
     title: str
-
-
-class Event(EventBase):
-    date: datetime
 
 
 class EventResponse(BaseModel):
@@ -79,14 +80,6 @@ class UserInDB(UserBase):
     hashed_password: str
 
 
-class User(UserBase):
-    events: List[Event] = []
-    notes: List[Note] = []
-
-    class Config:
-        orm_mode = True
-
-
 class Token(BaseModel):
     access_token: str
     token_type: str
@@ -94,3 +87,12 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: Union[str, None] = None
+
+
+class User(UserBase):
+    class Config:
+        orm_mode = True
+
+    @classmethod
+    def from_orm(cls, obj):
+        return cls(email=obj.email, username=obj.username, user_id=obj.user_id)
