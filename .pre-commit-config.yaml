@@ -23,7 +23,7 @@ repos:
     hooks:
       - id: black
         language_version: python3
-        args: ["--line-length=79"]
+        args: ["--line-length=179"]
   - repo: git@github.com:pre-commit/mirrors-mypy.git
     rev: v1.0.0
     hooks:
