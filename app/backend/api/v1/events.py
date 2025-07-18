@@ -1,13 +1,18 @@
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.backend.api.v1.auth import get_current_user
 from app.backend.sql_app.crud import create_event, get_event, get_user_events
 from app.backend.sql_app.main import get_db
 from app.backend.sql_app.models import Event as EventModel
-from app.backend.sql_app.schemas import EventCreate, EventResponse, User
+from app.backend.sql_app.schemas import (
+    EventCreate,
+    EventResponse,
+    EventUpdate,
+    User,
+)
 
 router = APIRouter()
 
@@ -29,19 +34,18 @@ async def get_one_event(event_id: int, db: Session = Depends(get_db)):
         return "None"
 
 
-@router.put("events/{event_id}", response_model=EventResponse)
+@router.put("/events/{event_id}", response_model=EventResponse)
 async def update_event(
-    event_id: int, data: EventCreate, db: Session = Depends(get_db)
+    event_id: int, data: EventUpdate, db: Session = Depends(get_db)
 ):
     existing_event = get_event(db=db, event_id=event_id)
     if existing_event:
         existing_event.title = data.title
-        existing_event.date = data.date
         db.commit()
         db.refresh(existing_event)
         return existing_event
     else:
-        return "Event not found"
+        raise HTTPException(status_code=404, detail="Event not found")
 
 
 @router.post("/events", response_model=EventResponse)

@@ -69,10 +69,6 @@ def test_update_event(test_db):
     # Update the event
     update_data = {
         "title": "Updated Event Title",
-        "date": dt.datetime.now(timezone.utc)
-        .replace(microsecond=0)
-        .astimezone()
-        .isoformat(),
     }
 
     update_response = client.put(

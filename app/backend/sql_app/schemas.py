@@ -36,6 +36,10 @@ class EventCreate(BaseModel):
     title: str
 
 
+class EventUpdate(BaseModel):
+    title: str
+
+
 class EventResponse(BaseModel):
     event_id: int
     title: str
