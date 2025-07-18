@@ -89,7 +89,7 @@ class FastAPIClient {
 			return resp.data
 		})
 	}
-
+	// Events
 	createEvent(title, date){
 		const form_data = { title, date };
 		return this.apiClient
@@ -106,9 +106,48 @@ class FastAPIClient {
 	}
 
 	getEventById(eventId) {
-		return this.apiClient.get('/event/' + eventId).then(({data}) => {
+		return this.apiClient.get('/events/' + eventId).then(({data}) => {
 			return data
 		})
+	}
+
+	updateEvent(title, eventId) {
+		const form_data = { title };
+		return this.apiClient
+			.put("/events/" + eventId, form_data)
+			.then((resp) => {
+				return resp.data
+			})
+	}
+
+	// Notes
+	getNotes() {
+		return this.apiClient.get('/notes').then(({data}) => {
+			return data
+		}
+		)
+	}
+
+	createNote(title) {
+		const form_data = { title };
+		return this.apiClient
+			.post("/notes", form_data)
+			.then((resp) => {
+				return resp.data
+			})
+	}
+	getNoteById(noteId) {
+		return this.apiClient.get('/notes/' + noteId).then(({data}) => {
+			return data
+		})
+	}
+	updateNote(noteId, title) {
+		const form_data = { title };
+		return this.apiClient
+			.put("/notes/" + noteId, form_data)
+			.then((resp) => {
+				return resp.data
+			})
 	}
 
 

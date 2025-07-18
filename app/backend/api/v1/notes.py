@@ -50,7 +50,7 @@ async def delete_note(note_id: int, db: Session = Depends(get_db)):
         return "Note not found"
 
 
-@router.get("/note/{note_id}", response_model=NoteResponse)
+@router.get("/notes/{note_id}", response_model=NoteResponse)
 async def retrieve_note(note_id: int, db: Session = Depends(get_db)):
     note = get_note(db=db, note_id=note_id)
     if note:

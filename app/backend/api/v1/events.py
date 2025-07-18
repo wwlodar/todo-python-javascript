@@ -29,6 +29,21 @@ async def get_one_event(event_id: int, db: Session = Depends(get_db)):
         return "None"
 
 
+@router.put("events/{event_id}", response_model=EventResponse)
+async def update_event(
+    event_id: int, data: EventCreate, db: Session = Depends(get_db)
+):
+    existing_event = get_event(db=db, event_id=event_id)
+    if existing_event:
+        existing_event.title = data.title
+        existing_event.date = data.date
+        db.commit()
+        db.refresh(existing_event)
+        return existing_event
+    else:
+        return "Event not found"
+
+
 @router.post("/events", response_model=EventResponse)
 async def add_new_event(
     data: EventCreate,
