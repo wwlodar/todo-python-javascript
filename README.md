@@ -1,4 +1,4 @@
-# Todo Python JavaScript
+# Todo Python JavaScript [![CircleCI](https://circleci.com/gh/wwlodar/todo-python-javascript.svg?style=svg)](https://circleci.com/gh/wwlodar/todo-python-javascript)
 
 This project is a full-stack application built with FastAPI for the backend and React for the frontend. It allows users to register, log in, create events, and add notes.
 

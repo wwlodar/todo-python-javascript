@@ -2,30 +2,20 @@ import datetime as dt
 from datetime import timezone
 
 from app.backend.tests.conftest import client
+from app.backend.tests.helper import Helper
 
 
 def test_create_new_event(test_db):
-    register = client.post(
-        "api/v1/register",
-        json={
-            "password": "Password1234!",
-            "username": "foobar",
-            "email": "foobar@test.com",
-        },
+    helper = Helper()
+    helper.create_user(
+        client=client,
+        username="TestClient",
     )
-    assert register.status_code == 200
-
-    login = client.post(
-        "api/v1/login",
-        data={
-            "password": "Password1234!",
-            "username": "foobar",
-        },
+    token = helper.login_user(
+        client=client,
+        username="TestClient",
     )
 
-    assert login.status_code == 200
-
-    token = login.json()["access_token"]
     # {'title': 'Event title', 'date': '2024-06-24T15:25:23+02:00'}
     data = {
         "title": "Event title",

@@ -11,7 +11,8 @@ class NoteBase(BaseModel):
     user_id: str
 
 
-class NoteCreate(NoteBase):
+class NoteCreate(BaseModel):
+    title: str
     date_added = datetime.now().date()
 
 

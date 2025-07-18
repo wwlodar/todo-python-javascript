@@ -63,7 +63,7 @@ jobs:
           name: Running tests
           command: |
             . venv/bin/activate
-            pytest app/backend/tests/
+            pytest --cov=app/backend --cov-report=term-missing app/backend/tests/
 
 
 workflows:

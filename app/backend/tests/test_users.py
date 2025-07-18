@@ -62,6 +62,16 @@ def test_login(test_db):
     assert "access_token" in str(response.content)
     assert "refresh_token" in str(response.content)
 
+    response2 = client.post(
+        "api/v1/login",
+        data={
+            "password": "IncorrectPassword",
+            "username": "foobar",
+        },
+    )
+    assert response2.status_code == 401
+    assert "Incorrect username or password" in str(response2.content)
+
 
 def test_logout(test_db):
     register = client.post(
@@ -86,8 +96,14 @@ def test_logout(test_db):
     token = login.json()["access_token"]
 
     response = client.post(
-        "api/v1/logout", headers={"Authorization": f"Bearer {token}"}
+        "/api/v1/logout", headers={"Authorization": f"Bearer {token}"}
     )
-
     assert response.status_code == 200
-    assert response.content == b'{"detail":"Access token has been revoked"}'
+    assert response.json() == {"detail": "Access token has been revoked"}
+
+    # Second logout with same token - should return deleted: False
+    response2 = client.post(
+        "/api/v1/logout", headers={"Authorization": f"Bearer {token}"}
+    )
+    assert response2.status_code == 200
+    assert response2.json() == {"deleted": False}

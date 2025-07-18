@@ -7,7 +7,12 @@ from app.backend.api.v1.auth import get_current_user
 from app.backend.sql_app.crud import create_note, get_note, get_user_notes
 from app.backend.sql_app.main import get_db
 from app.backend.sql_app.models import Note as NoteModel
-from app.backend.sql_app.schemas import NoteCreate, NoteResponse, NoteUpdate, User
+from app.backend.sql_app.schemas import (
+    NoteCreate,
+    NoteResponse,
+    NoteUpdate,
+    User,
+)
 
 router = APIRouter()
 
@@ -21,7 +26,9 @@ async def get_user_notes_from_db(
 
 
 @router.put("/notes/{note_id}", response_model=NoteResponse)
-async def update_note(note_id: int, note: NoteUpdate, db: Session = Depends(get_db)):
+async def update_note(
+    note_id: int, note: NoteUpdate, db: Session = Depends(get_db)
+):
     existing_note = get_note(db=db, note_id=note_id)
     if existing_note:
         existing_note.done = note.done
@@ -60,9 +67,9 @@ async def add_new_note(
 ):
     note = NoteModel(
         title=note.title,
-        note_id=note.note_id,
-        done=note.done,
+        done=False,
         user_id=current_user.user_id,
+        date_added=note.date_added,
     )
     note = create_note(db=db, note=note)
     return note
