@@ -19,6 +19,9 @@ import NavBar from "./components/navbar"
 import AuthProvider from './hooks/authProvider';
 import PrivateRoute from "./router/route";
 
+// Error handling
+import NotFound from "./pages/not_found/index";
+
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -30,6 +33,7 @@ export default function App() {
       <AuthProvider>
       <NavBar/>
       <Routes>
+          <Route path="*" element={<NotFound />} />
           <Route path="/" element={<Home />} />
           <Route path="register/" element={<Register/>}/>
           <Route path="login/" element={<Login/>}/>
