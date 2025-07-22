@@ -1,10 +1,13 @@
 import datetime as dt
 from datetime import timezone
 
+from freezegun import freeze_time
+
 from app.backend.tests.conftest import client
 from app.backend.tests.helper import Helper
 
 
+@freeze_time("2025-11-11 11:00:00")
 def test_create_new_event(test_db):
     helper = Helper()
     helper.create_user(
@@ -17,12 +20,10 @@ def test_create_new_event(test_db):
     )
 
     # {'title': 'Event title', 'date': '2024-06-24T15:25:23+02:00'}
+    tomorrow = dt.datetime.now(timezone.utc) + dt.timedelta(days=1)
     data = {
         "title": "Event title",
-        "date": dt.datetime.now(timezone.utc)
-        .replace(microsecond=0)
-        .astimezone()
-        .isoformat(),
+        "date": tomorrow.astimezone().isoformat(),
     }
 
     response = client.post(

@@ -2,9 +2,7 @@
     "python.pythonPath": "venv/bin/python",
     "python.terminal.activateEnvironment": true,
     "editor.codeActionsOnSave": {
-            "source.fixAll.eslint": "true",
-        },
-        "eslint.validate": ["javascript"]
-
-
+        "source.fixAll.eslint": "always"
+    },
+    "eslint.validate": ["javascript"],
 }
