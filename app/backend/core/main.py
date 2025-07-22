@@ -1,4 +1,4 @@
-from app.backend.sql_app.db import SessionLocal
+from app.backend.core.db import SessionLocal
 
 
 # Dependency

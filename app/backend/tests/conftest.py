@@ -5,9 +5,9 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from app.backend.core import Base
+from app.backend.core.main import get_db
 from app.backend.main import app
-from app.backend.sql_app import Base
-from app.backend.sql_app.main import get_db
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"

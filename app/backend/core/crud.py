@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
-from app.backend.sql_app.models import Event, Note, User
-from app.backend.sql_app.schemas import NoteCreate
+from app.backend.core.models import Event, Note, User
+from app.backend.core.schemas import NoteCreate
 
 
 def get_user_by_email(db: Session, email: str):

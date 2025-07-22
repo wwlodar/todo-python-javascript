@@ -4,10 +4,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.backend.api.v1.auth import get_current_user
-from app.backend.sql_app.crud import create_event, get_event, get_user_events
-from app.backend.sql_app.main import get_db
-from app.backend.sql_app.models import Event as EventModel
-from app.backend.sql_app.schemas import (
+from app.backend.core.crud import create_event, get_event, get_user_events
+from app.backend.core.main import get_db
+from app.backend.core.models import Event as EventModel
+from app.backend.core.schemas import (
     EventCreate,
     EventResponse,
     EventUpdate,

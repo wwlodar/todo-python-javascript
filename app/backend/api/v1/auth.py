@@ -8,9 +8,9 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
-from app.backend.sql_app.crud import get_user
-from app.backend.sql_app.main import get_db
-from app.backend.sql_app.schemas import TokenData
+from app.backend.core.crud import get_user
+from app.backend.core.main import get_db
+from app.backend.core.schemas import TokenData
 
 # to get a string like this run:
 # openssl rand -hex 32

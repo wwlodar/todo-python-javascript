@@ -4,7 +4,7 @@ from datetime import timezone
 from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
-from app.backend.sql_app import Base
+from app.backend.core import Base
 
 
 class User(Base):

@@ -4,15 +4,10 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.backend.api.v1.auth import get_current_user
-from app.backend.sql_app.crud import create_note, get_note, get_user_notes
-from app.backend.sql_app.main import get_db
-from app.backend.sql_app.models import Note as NoteModel
-from app.backend.sql_app.schemas import (
-    NoteCreate,
-    NoteResponse,
-    NoteUpdate,
-    User,
-)
+from app.backend.core.crud import create_note, get_note, get_user_notes
+from app.backend.core.main import get_db
+from app.backend.core.models import Note as NoteModel
+from app.backend.core.schemas import NoteCreate, NoteResponse, NoteUpdate, User
 
 router = APIRouter()
 

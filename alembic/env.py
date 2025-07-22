@@ -3,8 +3,8 @@ from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config, pool
 
-from alembic import context
-from app.backend.sql_app import Base
+from alembic import context  # type: ignore[attr-defined]
+from app.backend.core import Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

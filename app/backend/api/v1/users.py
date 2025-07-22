@@ -15,9 +15,9 @@ from app.backend.api.v1.auth import (
     get_current_user,
     get_password_hash,
 )
-from app.backend.sql_app.crud import create_user, get_user_by_email
-from app.backend.sql_app.main import get_db
-from app.backend.sql_app.schemas import TokenData, UserCreate, UserInDB
+from app.backend.core.crud import create_user, get_user_by_email
+from app.backend.core.main import get_db
+from app.backend.core.schemas import TokenData, UserCreate, UserInDB
 
 router = APIRouter()
 
