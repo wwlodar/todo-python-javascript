@@ -17,7 +17,7 @@ const EventDisplay = ({ event }) => {
       <p><strong>Event ID:</strong> {event.event_id}</p>
     </div>
   );
-};
+};AuthContext
 EventDisplay.propTypes = {
   event: PropTypes.shape({
     title: PropTypes.string,

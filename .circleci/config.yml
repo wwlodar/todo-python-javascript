@@ -63,7 +63,7 @@ jobs:
           name: Running tests
           command: |
             . venv/bin/activate
-            pytest --cov=app/backend --cov-report=term-missing --cov-config=../../.coveragerc
+            pytest --cov=app/backend --cov-report=term-missing --cov-config=/home/circleci/project/.coveragerc
 
 
 workflows:

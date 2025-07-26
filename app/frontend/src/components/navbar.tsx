@@ -9,7 +9,7 @@ const NavBar = () => {
     console.log(auth);
     const navigate = useNavigate();
 
-    function logout () {
+    function logout (): void {
         fastapiclient.logout()
         .then( (response) => {
             auth.logOut()

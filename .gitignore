@@ -93,6 +93,11 @@ app/frontend/node_modules
 .pnp.js
 jspm_packages/
 
+# Next.js build output
+.next/
+out/
+node_modules/
+
 # Optional npm cache directory
 .npm
 
