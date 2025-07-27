@@ -3,12 +3,12 @@ from datetime import timezone
 
 from freezegun import freeze_time
 
-from app.backend.tests.conftest import client
+from app.backend.core.models import Event
 from app.backend.tests.helper import Helper
 
 
 @freeze_time("2025-11-11 11:00:00")
-def test_create_new_event(test_db):
+def test_create_new_event(test_db, client):
     helper = Helper()
     helper.create_user(
         client=client,
@@ -19,7 +19,6 @@ def test_create_new_event(test_db):
         username="TestClient",
     )
 
-    # {'title': 'Event title', 'date': '2024-06-24T15:25:23+02:00'}
     tomorrow = dt.datetime.now(timezone.utc) + dt.timedelta(days=1)
     data = {
         "title": "Event title",
@@ -39,7 +38,7 @@ def test_create_new_event(test_db):
     assert "user_id" in response.json()
 
 
-def test_update_event(test_db):
+def test_update_event(test_db, client):
     helper = Helper()
     helper.create_user(
         client=client,
@@ -49,23 +48,13 @@ def test_update_event(test_db):
         client=client,
         username="TestClient",
     )
-
-    # Create an event first
-    data = {
-        "title": "Initial Event",
-        "date": dt.datetime.now(timezone.utc)
-        .replace(microsecond=0)
-        .astimezone()
-        .isoformat(),
-    }
-
-    response = client.post(
-        "api/v1/events",
-        json=data,
-        headers={"Authorization": f"Bearer {token}"},
+    event = Event(
+        title="Initial Event",
+        date=dt.datetime.now(timezone.utc),
+        user_id=helper.get_user_id(test_db, "TestClient"),
     )
-    assert response.status_code == 200
-    event_id = response.json()["event_id"]
+    test_db.add(event)
+    test_db.commit()
 
     # Update the event
     update_data = {
@@ -73,17 +62,17 @@ def test_update_event(test_db):
     }
 
     update_response = client.put(
-        f"api/v1/events/{event_id}",
+        f"api/v1/events/{event.event_id}",
         json=update_data,
         headers={"Authorization": f"Bearer {token}"},
     )
 
     assert update_response.status_code == 200
     assert update_response.json()["title"] == "Updated Event Title"
-    assert update_response.json()["event_id"] == event_id
+    assert update_response.json()["event_id"] == event.event_id
 
 
-def test_get_events(test_db):
+def test_get_events(test_db, client):
     helper = Helper()
     helper.create_user(
         client=client,
@@ -94,36 +83,23 @@ def test_get_events(test_db):
         username="TestClient",
     )
 
-    # Create an event first
-    data = {
-        "title": "Event for Retrieval",
-        "date": dt.datetime.now(timezone.utc)
-        .replace(microsecond=0)
-        .astimezone()
-        .isoformat(),
-    }
-
-    response = client.post(
-        "api/v1/events",
-        json=data,
-        headers={"Authorization": f"Bearer {token}"},
+    event = Event(
+        title="Sample Event",
+        date=dt.datetime.now(timezone.utc),
+        user_id=helper.get_user_id(test_db, "TestClient"),
     )
-    assert response.status_code == 200
+    test_db.add(event)
+    test_db.commit()
 
-    data = {
-        "title": "Another event",
-        "date": dt.datetime.now(timezone.utc)
+    event2 = Event(
+        title="Another event",
+        date=dt.datetime.now(timezone.utc)
         .replace(hour=1, microsecond=0)
-        .astimezone()
-        .isoformat(),
-    }
-
-    response = client.post(
-        "api/v1/events",
-        json=data,
-        headers={"Authorization": f"Bearer {token}"},
+        .astimezone(),
+        user_id=helper.get_user_id(test_db, "TestClient"),
     )
-    assert response.status_code == 200
+    test_db.add(event2)
+    test_db.commit()
 
     # Retrieve the events
     get_response = client.get(
@@ -134,5 +110,32 @@ def test_get_events(test_db):
     assert get_response.status_code == 200
     assert isinstance(get_response.json(), list)
     assert len(get_response.json()) == 2
-    assert get_response.json()[0]["title"] == "Event for Retrieval"
+    assert get_response.json()[0]["title"] == "Sample Event"
     assert get_response.json()[1]["title"] == "Another event"
+
+
+@freeze_time("2025-11-11 11:00:00")
+def test_get_one_event(test_db, client):
+    helper = Helper()
+    helper.create_user(client=client, username="TestClient")
+    token = helper.login_user(client=client, username="TestClient")
+
+    event = Event(
+        title="Sample Event",
+        date=dt.datetime.now(timezone.utc) + dt.timedelta(days=1),
+        user_id=helper.get_user_id(test_db, "TestClient"),
+    )
+    test_db.add(event)
+    test_db.commit()
+    event_id = event.event_id
+
+    response = client.get(
+        f"api/v1/event/{event_id}",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+
+    assert response.status_code == 200
+
+    assert response.json()["title"] == "Sample Event"
+    assert response.json()["event_id"] == event_id
+    assert response.json()["happened"] is False

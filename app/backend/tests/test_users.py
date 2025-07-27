@@ -1,7 +1,4 @@
-from app.backend.tests.conftest import client
-
-
-def test_register(test_db):
+def test_register(test_db, client):
     response = client.post(
         "api/v1/register",
         json={
@@ -15,7 +12,7 @@ def test_register(test_db):
     assert response.status_code == 200
 
 
-def test_register_user_twice(test_db):
+def test_register_user_twice(test_db, client):
     client.post(
         "api/v1/register",
         json={
@@ -40,7 +37,7 @@ def test_register_user_twice(test_db):
     assert response.status_code == 400
 
 
-def test_login(test_db):
+def test_login(test_db, client):
     register = client.post(
         "api/v1/register",
         json={
@@ -73,7 +70,7 @@ def test_login(test_db):
     assert "Incorrect username or password" in str(response2.content)
 
 
-def test_logout(test_db):
+def test_logout(test_db, client):
     register = client.post(
         "api/v1/register",
         json={

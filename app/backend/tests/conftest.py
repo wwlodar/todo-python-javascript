@@ -30,13 +30,27 @@ def override_get_db():
         db.close()
 
 
-@pytest.fixture()
-def test_db():
+@pytest.fixture(scope="function", autouse=True)
+def setup_database():
     Base.metadata.create_all(bind=engine)
     yield
     Base.metadata.drop_all(bind=engine)
 
 
-app.dependency_overrides[get_db] = override_get_db
+@pytest.fixture()
+def test_db():
+    """Provide a fresh database session for a test."""
+    db = TestingSessionLocal()
+    try:
+        yield db
+    finally:
+        db.rollback()  # rollback any changes after test
+        db.close()
 
-client = TestClient(app)
+
+@pytest.fixture()
+def client(test_db):
+    """Create a TestClient that uses the test_db session."""
+    app.dependency_overrides[get_db] = override_get_db
+    with TestClient(app) as c:
+        yield c

@@ -1,8 +1,7 @@
-from app.backend.tests.conftest import client
 from app.backend.tests.helper import Helper
 
 
-def test_create_new_note(test_db):
+def test_create_new_note(test_db, client):
     helper = Helper()
     helper.create_user(
         client=client,
