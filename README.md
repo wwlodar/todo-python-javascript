@@ -1,4 +1,4 @@
-# Todo Python JavaScript [![CircleCI](https://circleci.com/gh/wwlodar/todo-python-javascript.svg?style=svg)](https://circleci.com/gh/wwlodar/todo-python-javascript)
+# Todo Python JavaScript [![CircleCI](https://circleci.com/gh/wwlodar/todo-python-javascript.svg?style=svg)](https://circleci.com/gh/wwlodar/todo-python-javascript) [![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-360/) ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)
 
 This project is a full-stack application built with FastAPI for the backend and React for the frontend. It allows users to register, log in, create events, and add notes.
 
