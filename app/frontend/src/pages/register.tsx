@@ -1,8 +1,8 @@
 import React from 'react';
 import {useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {fastapiclient} from '../../client'
-import InputForm from '../../components/InputForm'
+import {fastapiclient} from '../client'
+import InputForm from '../components/InputForm'
+import { useRouter } from 'next/router';
 
 
 const SignUp = () => {
@@ -11,8 +11,7 @@ const SignUp = () => {
   let [isDisabled, setDisabledState] = useState(false);
   const [registerForm, setRegisterForm] = useState({ email: '', password: '', username: '', confirmPassword: '' });
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate()
-
+  const router = useRouter();
 
   const onInputChange = e => {
     const { name, value } = e.target;
@@ -23,55 +22,76 @@ const SignUp = () => {
     validateInput(e);
   }
 
-  const validateInput = e => {
+interface RegisterForm {
+    email: string;
+    password: string;
+    username: string;
+    confirmPassword: string;
+}
+
+interface ErrorState {
+    email: string;
+    password: string;
+    username: string;
+    confirmPassword: string;
+}
+
+interface ValidateInputEvent {
+    target: {
+        name: keyof RegisterForm;
+        value: string;
+    };
+}
+
+const validateInput = (e: ValidateInputEvent) => {
     let { name, value } = e.target;
-    setError(prev => {
-      const stateObj = { ...prev, [name]: "" };
+    setError((prev: ErrorState) => {
+        const stateObj: ErrorState = { ...prev, [name]: "" };
 
-      switch (name) {
-        case "username":
-          if (value.length < 4) {
-            stateObj["username"] = "Username is too short";
-            setDisabledState(true);}
-          else {
-            setDisabledState(false);
-          }
-          break;
+        switch (name) {
+            case "username":
+                if (value.length < 4) {
+                    stateObj["username"] = "Username is too short";
+                    setDisabledState(true);}
+                else {
+                    setDisabledState(false);
+                }
+                break;
 
-        case "password":
-          if (!value) {
-            stateObj[name] = "Please enter Password.";
-            setDisabledState(true);
-          } else if (registerForm.confirmPassword && value !== registerForm.confirmPassword) {
-            stateObj["confirmPassword"] = "Password and Confirm Password does not match.";}
-            else if (value.length < 8) {
-            stateObj["password"] = "Password is too short";
-            setDisabledState(true);
-          } else {
-            setDisabledState(false);
-          }
-          break;
+            case "password":
+                if (!value) {
+                    stateObj[name] = "Please enter Password.";
+                    setDisabledState(true);
+                } else if (registerForm.confirmPassword && value !== registerForm.confirmPassword) {
+                    stateObj["confirmPassword"] = "Password and Confirm Password does not match.";}
+                    else if (value.length < 8) {
+                    stateObj["password"] = "Password is too short";
+                    setDisabledState(true);
+                } else {
+                    setDisabledState(false);
+                }
+                break;
 
-        case "confirmPassword":
-          if (!value) {
-            stateObj[name] = "Please enter Confirm Password.";
-            setDisabledState(true);
-          } else if (registerForm.password && value !== registerForm.password) {
-            stateObj[name] = "Password and Confirm Password does not match.";
-            setDisabledState(true);
-          }
-          else {
-            setDisabledState(false);
-          }
-          break;
+            case "confirmPassword":
+                if (!value) {
+                    stateObj[name] = "Please enter Confirm Password.";
+                    setDisabledState(true);
+                } else if (registerForm.password && value !== registerForm.password) {
+                    stateObj[name] = "Password and Confirm Password does not match.";
+                    setDisabledState(true);
+                }
+                else {
+                    setDisabledState(false);
+                }
+                break;
 
-        default:
-          break;
-      }
+            default:
+                break;
+        }
 
-      return stateObj;
+        return stateObj;
     });
-  }
+}
 
   const onRegister = (e) => {
     e.preventDefault();
@@ -79,7 +99,7 @@ const SignUp = () => {
 
     fastapiclient.register(registerForm.email, registerForm.password, registerForm.username)
       .then( () => {
-        navigate('/')
+        router.push('/');
       })
       .catch( (err) => {
         setLoading(false)
