@@ -1,27 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { fastapiclient } from '../../client';
+import { fastapiclient } from '../client';
 import "react-datepicker/dist/react-datepicker.css";
 import PropTypes from 'prop-types';
+// pages/your-page.tsx or .tsx file
 
-const EventDisplay = ({ event }) => {
+import { requireAuth } from '../utils/auth';  // import your requireAuth wrapper
+
+// Your page just renders EventList
+const EventListPage = () => <EventList />;
+
+interface Event {
+  title?: string;
+  date?: string | Date;
+  happened?: boolean;
+  user_id?: string | number;
+  event_id?: string | number;
+}
+
+interface EventDisplayProps {
+  event?: Event;
+}
+
+const EventDisplay: React.FC<EventDisplayProps> = ({ event }) => {
   if (!event) return null;
+
   return (
     <div>
       <h4><strong>Title:</strong> {event.title}</h4>
       <p><strong>Event ID:</strong> {event.event_id}</p>
-      <p><strong>Date:</strong> {new Date(event.date).toLocaleString() }</p>
+      <p>
+        <strong>Date:</strong>{' '}
+        {event.date ? new Date(event.date).toLocaleString() : 'No date'}
+      </p>
       <p><strong>Happened:</strong> {event.happened ? 'Yes' : 'No'}</p>
     </div>
   );
-};
-EventDisplay.propTypes = {
-  event: PropTypes.shape({
-    title: PropTypes.string,
-    date: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
-    happened: PropTypes.bool,
-    user_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    event_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  }),
 };
 
 const EventList = () => {
@@ -69,7 +82,7 @@ const EventList = () => {
 
 
   useEffect(() => {
-    fastapiclient.getEvents("/events")
+    fastapiclient.getEvents()
       .then(response => {
         setEvents(response);
       })
@@ -118,4 +131,12 @@ const EventList = () => {
 }
 
 
-export default EventList;
+export const getServerSideProps = requireAuth(async (context) => {
+    // This function will run on the server side before rendering the page
+
+  return {
+    props: {},
+  };
+});
+
+export default EventListPage;

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Navigate } from 'react-router-dom';
-import InputForm from '../../components/InputForm';
-import { useAuth } from "../../hooks/authProvider";
-import { fastapiclient } from '../../client';
+import { useRouter } from 'next/router';
+import InputForm from '../components/InputForm';
+import { useAuth } from "../hooks/authProvider";
+import { fastapiclient } from '../client';
 
 interface LoginForm {
   email: string;
@@ -26,6 +26,7 @@ const LoginUser: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const auth = useAuth();
+  const router = useRouter();
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -77,7 +78,7 @@ const LoginUser: React.FC = () => {
     try {
       const response = await fastapiclient.login(loginForm.username, loginForm.password);
       auth.logIn(response);
-      return <Navigate to="/" replace />;
+      return router.push('/');
     } catch (err: any) {
       setLoading(false);
       setBackendError(err.message || 'Login failed');

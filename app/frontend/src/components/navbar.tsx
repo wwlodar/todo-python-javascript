@@ -1,19 +1,21 @@
 import React from "react"
-import { NavLink } from 'react-router-dom'
 import { useAuth } from "../hooks/authProvider";
 import {fastapiclient} from '../client.js';
-import { useNavigate } from "react-router-dom";
+import Router from "next/router";
+import next from "next";
+import Link from 'next/link';
 
 const NavBar = () => {
     const auth = useAuth();
     console.log(auth);
-    const navigate = useNavigate();
+    const router = Router;
+
 
     function logout (): void {
         fastapiclient.logout()
         .then( (response) => {
             auth.logOut()
-            navigate('/');
+            router.push('/');
             console.log(response)
             window.location.reload()
         })
@@ -27,9 +29,9 @@ const NavBar = () => {
                 <h3>Navigation</h3>
             <nav>
                 <ul className="list-unstyled">
-                    <li><NavLink to='/'>Home</NavLink></li>
-                    <li><NavLink to='/register'>Register</NavLink></li>
-                    <li><NavLink to='/login'>Login</NavLink></li>
+                    <li><Link href='/'>Home</Link></li>
+                    <li><Link href='/register'>Register</Link></li>
+                    <li><Link href='/login'>Login</Link></li>
                 </ul>
             </nav>
             </div>
@@ -40,10 +42,10 @@ const NavBar = () => {
                 <h3>Logged in navbar</h3>
             <nav>
                 <ul className="list-unstyled">
-                    <li><NavLink to='/'>Home</NavLink></li>
+                    <li><Link href='/'>Home</Link></li>
                     <li><button type='button' onClick={logout}>Logout</button></li>
-                    <li><NavLink to='/add_event'>Add event</NavLink></li>
-                    <li><NavLink to='/get_events'>See your events</NavLink></li>
+                    <li><Link href='/add_event'>Add event</Link></li>
+                    <li><Link href='/get_events'>See your events</Link></li>
                     <li>Add note</li>
                     <li>See your notes</li>
                 </ul>

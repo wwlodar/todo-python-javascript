@@ -1,12 +1,25 @@
+import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
+import { requireAuth } from '../utils/requireAuth';
 import React, { useEffect, useState } from 'react';
-import { fastapiclient } from '../../client';
-import InputForm from '../../components/InputForm';
+import { fastapiclient } from '../client';
+import InputForm from '../components/InputForm';
 import DatePicker from 'react-datepicker';
-import { useLocation } from 'react-router-dom';
+import Router from 'next/router';
 import "react-datepicker/dist/react-datepicker.css";
-import PropTypes from 'prop-types';
 
-const EventDisplay = ({ event }) => {
+type Event = {
+  title?: string;
+  date?: string | Date;
+  happened?: boolean;
+  user_id?: string | number;
+  event_id?: string | number;
+};
+
+type EventDisplayProps = {
+  event?: Event;
+};
+
+const EventDisplay: React.FC<EventDisplayProps> = ({ event }) => {
   if (!event) return null;
   return (
     <div className="event-display">
@@ -17,19 +30,11 @@ const EventDisplay = ({ event }) => {
       <p><strong>Event ID:</strong> {event.event_id}</p>
     </div>
   );
-};AuthContext
-EventDisplay.propTypes = {
-  event: PropTypes.shape({
-    title: PropTypes.string,
-    date: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
-    happened: PropTypes.bool,
-    user_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    event_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  }),
 };
 
+
 const AddEventForm = () => {
-  const location = useLocation();
+  const router  = Router;
   const [error, setError] = useState({ title: '', date: '' });
   const [backendError, setBackendError] = useState('');
   const [isDisabled, setDisabledState] = useState(true);
@@ -42,11 +47,12 @@ const AddEventForm = () => {
   }, [location.pathname]);
 
   // Validation helper to check if all inputs are valid
-  const validateAll = (titleVal, dateVal) => {
+  const validateAll = (titleVal: string, dateVal: Date) => {
     return titleVal.trim().length > 0 && dateVal instanceof Date && !isNaN(dateVal);
   };
 
-  const validateInput = ({ name, value }) => {
+  const validateInput = (name: string, value: Date | string | null
+  ) => {
     setError(prev => {
       const stateObj = { ...prev, [name]: '' };
 
@@ -66,7 +72,8 @@ const AddEventForm = () => {
     });
   };
 
-  const onInputChange = ({ name, value }) => {
+  const onInputChange = (name: string, value: Date | string
+   ) => {
     if (name === 'title') {
       setTitle(value);
     } else if (name === 'date') {
@@ -97,7 +104,7 @@ const AddEventForm = () => {
         required
         error={error.title}
         value={title}
-        onChange={(e) => onInputChange({ name: "title", value: e.target.value })}
+        onChange={(e) => onInputChange("title", e.target.value )}
       />
       <DatePicker
         name="date"
@@ -108,7 +115,7 @@ const AddEventForm = () => {
         selected={date}
         showTimeSelect
         timeIntervals={30}
-        onChange={(date) => onInputChange({ name: "date", value: date })}
+        onChange={(date) => onInputChange("date", date )}
       />
 
       <button
