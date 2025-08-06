@@ -31,11 +31,10 @@ export const AuthContext = createContext<AuthContextType>(defaultAuthContext);
 
 // AuthProvider component
 const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [token, setToken] = useState<string | null>(
-    localStorage.getItem("token")
-  );
-  const [loading, setLoading] = useState(true);
 
+  const [token, setToken] = useState<string | null>(null);
+
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {

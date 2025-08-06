@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import AuthProvider, { useAuth } from '../hooks/authProvider';
-import '../styles/globals.css';
+import NavBar from '../components/navbar';
+import Layout from '../components/layout';
 
 const publicPaths = ['/', '/login', '/register'];
 
@@ -27,7 +28,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
       <AuthGuard>
+        <Layout>
         <Component {...pageProps} />
+        </Layout>
       </AuthGuard>
     </AuthProvider>
   );
