@@ -35,7 +35,7 @@ const InputForm: React.FC<InputFormProps> = ({
         style={{ textAlign: 'right', paddingRight: '0.5rem', fontWeight: '600' }}
       >
         {label}
-        {required && ' *'}
+        {required}
       </label>
 
       <div style={{ display: 'flex', flexDirection: 'column' }}>

@@ -108,42 +108,61 @@ const AddEventForm = () => {
   };
 
   return (
-    <form onSubmit={onSendingEvent}>
-      <InputForm
-        type="text"
-        name="title"
-        label="Title"
-        required
-        error={error.title}
-        value={title}
-        onChange={(e) => onInputChange("title", e.target.value )}
-      />
-      <DatePicker
-        name="date"
-        required
-        placeholderText="Time & Date"
-        dateFormat="yyyy-MM-dd  h:mm aa"
-        selected={date}
-        showTimeSelect
-        timeIntervals={30}
-        onChange={(date) => onInputChange("date", date )}
-      />
+<form onSubmit={onSendingEvent}>
+  <div className="mb-3">
+    <InputForm
+      type="text"
+      name="title"
+      label="Title"
+      required
+      error={error.title}
+      value={title}
+      onChange={(e) => onInputChange("title", e.target.value)}
+    />
+  </div>
 
-      <button
-        title="Add event"
-        type="submit"
-        disabled={isDisabled}
-        className="rounded w-full mt-4 p-1"
-      >
-        Add
-      </button>
+  <div className="col-md-6"
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '200px 300px', // label column wider, input fixed width
+        alignItems: 'center',
+        gap: '0.5rem 1rem',
+        marginBottom: '1rem',
+      }}>
+    <label htmlFor="date" className="form-label fw-bold" style={{ textAlign: 'right', paddingRight: '0.5rem', fontWeight: '600' }}>Date</label>
+    <DatePicker
+      id="date"
+      name="date"
+      selected={date}
+      onChange={(date) => onInputChange("date", date)}
+      showTimeSelect
+      timeIntervals={30}
+      dateFormat="yyyy-MM-dd  h:mm aa"
+      placeholderText="Time & Date"
+      required
+      className={`form-control ${error.date ? 'is-invalid' : ''}`}
+    />
+    {error.date && <div className="invalid-feedback">{error.date}</div>}
+  </div>
 
-      <div>
-        {backendError && <h3 className="error-message">{backendError}</h3>}
-        <EventDisplay event={createdEvent} />
-      </div>
-    </form>
-  );
+
+  <button
+    title="Add event"
+    type="submit"
+    disabled={isDisabled}
+    className="btn btn-dark" style={{ marginLeft: '220px', textAlign: 'right', paddingRight: '0.5rem', fontWeight: '600' }}
+  >
+    Add
+  </button>
+
+  <div className="mt-3">
+    {backendError && <h3 className="text-danger">{backendError}</h3>}
+    <EventDisplay event={createdEvent} />
+  </div>
+</form>
+)
+
+
 };
 
 const AddNewEvent = () => (
