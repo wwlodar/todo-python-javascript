@@ -128,8 +128,8 @@ class FastAPIClient {
 		)
 	}
 
-	createNote(title) {
-		const form_data = { title };
+	createNote(title, date_added) {
+		const form_data = { title, date_added };
 		return this.apiClient
 			.post("/notes", form_data)
 			.then((resp) => {
