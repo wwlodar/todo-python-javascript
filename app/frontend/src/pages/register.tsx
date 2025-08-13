@@ -13,9 +13,9 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const onInputChange = e => {
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setRegisterForm(prev => ({
+    setRegisterForm((prev: RegisterForm) => ({
       ...prev,
       [name]: value
     }));
