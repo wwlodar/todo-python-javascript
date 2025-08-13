@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { fastapiclient } from '../client';
 import "react-datepicker/dist/react-datepicker.css";
-import PropTypes from 'prop-types';
-// pages/your-page.tsx or .tsx file
 
 import { requireAuth } from '../utils/auth';  // import your requireAuth wrapper
 
-// Your page just renders EventList
 const EventListPage = () => <EventList />;
 
 interface Event {
@@ -39,15 +36,19 @@ const EventDisplay: React.FC<EventDisplayProps> = ({ event }) => {
 
 const EventList = () => {
     // const location = useLocation();
-    const [events, setEvents] = useState([]);
-    const [error, setError] = useState(null);
-    const [editingEventId, setEditingEventId] = useState(null);
+    const [events, setEvents] = useState<Event[]>([]);
+    const [editingEventId, setEditingEventId] = useState<string | number | null>(null);
     const [editedTitle, setEditedTitle] = useState("");
-    const [editingBackendError, setEditingBackendError] = useState('');
+    const [error, setError] = useState<any>(null);
+    const [editingBackendError, setEditingBackendError] = useState<string | null>('');
 
-    const startEditing = (event) => {
-      setEditingEventId(event.event_id);
-      setEditedTitle(event.title);
+    const startEditing = (event: Event) => {
+      if (event.event_id !== undefined) {
+        setEditingEventId(event.event_id);
+      } else {
+        setEditingEventId(null); // fallback
+      }
+      setEditedTitle(event.title || "");
       setEditingBackendError('');
     };
 
@@ -113,9 +114,7 @@ const EventList = () => {
                 {editingBackendError && (
   <p className="text-danger" style={{ marginTop: '0.5rem' }}>
     {
-      typeof editingBackendError === 'string'
-        ? editingBackendError
-        : editingBackendError.detail || editingBackendError.message || 'Unknown error'
+        editingBackendError.detail || editingBackendError.message || 'Unknown error'
     }
   </p>)}
               </div>
