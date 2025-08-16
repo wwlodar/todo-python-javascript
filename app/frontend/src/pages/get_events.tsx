@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { fastapiclient } from '../client';
 import "react-datepicker/dist/react-datepicker.css";
 
-import { requireAuth } from '../utils/auth';  // import your requireAuth wrapper
+import { requireAuth } from '../utils/auth';
 
 const EventListPage = () => <EventList />;
 
@@ -114,7 +114,7 @@ const EventList = () => {
                 {editingBackendError && (
   <p className="text-danger" style={{ marginTop: '0.5rem' }}>
     {
-        editingBackendError.detail || editingBackendError.message || 'Unknown error'
+        editingBackendError
     }
   </p>)}
               </div>
