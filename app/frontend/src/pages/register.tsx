@@ -10,7 +10,6 @@ const SignUp = () => {
   const [backendError, setBackendError] = useState('');
   let [isDisabled, setDisabledState] = useState(false);
   const [registerForm, setRegisterForm] = useState({ email: '', password: '', username: '', confirmPassword: '' });
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,7 +18,12 @@ const SignUp = () => {
       ...prev,
       [name]: value
     }));
-    validateInput(e);
+    validateInput({target: {
+    name: name as keyof RegisterForm,
+    value,
+  },
+});
+
   }
 
 interface RegisterForm {
@@ -93,16 +97,14 @@ const validateInput = (e: ValidateInputEvent) => {
     });
 }
 
-  const onRegister = (e) => {
+  const onRegister = (e: React.FormEvent<HTMLFormElement>)=> {
     e.preventDefault();
-    setLoading(true)
 
     fastapiclient.register(registerForm.email, registerForm.password, registerForm.username)
       .then( () => {
         router.push('/');
       })
       .catch( (err) => {
-        setLoading(false)
         setBackendError(err);
       });
   }
@@ -145,9 +147,9 @@ const validateInput = (e: ValidateInputEvent) => {
             onChange={onInputChange}
           />
 
-        <button title={"Create Account"} loading={loading} disabled={isDisabled} className={`rounded w-full mt-4 p-1`}>Create Account</button>
+        <button title={"Create Account"} disabled={isDisabled} className={`rounded w-full mt-4 p-1`}>Create Account</button>
         <div>
-        {backendError && <h1>{backendError.message}</h1>}
+        {backendError && <h1>{backendError}</h1>}
         </div>
 
   </form>)}
